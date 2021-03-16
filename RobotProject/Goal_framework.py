@@ -2,6 +2,7 @@
 from ev3dev2.motor import LargeMotor, OUTPUT_B, OUTPUT_C, SpeedPercent, MoveTank
 from ev3dev2.sound import Sound
 from ev3dev2.sensor.lego import ColorSensor
+import time
 #s
 mLeft = LargeMotor(OUTPUT_B)
 mRight = LargeMotor(OUTPUT_C)
@@ -64,9 +65,26 @@ class GoalAgent:
             print(self.angle)
 
     def move(self, action_type, speed1, speed2, rotations):
-        if action_type == 'rotations':
-            drive.on_for_rotations(SpeedPercent(speed1), SpeedPercent(speed2), rotations)
-            self.update_state(speed1, speed2, rotations, action_type)
-        if action_type == 'spin':
-            drive.on_for_rotations(SpeedPercent(speed1), SpeedPercent(-speed1), rotations)
-            self.update_state(speed1, speed2, rotations, action_type)
+        drive.on_for_degrees(10, -10, 360)
+        time.sleep(2)
+        drive.on_for_degrees(5,10,720)
+        time.sleep(2)
+        drive.on_for_rotations(5, 10, 2)
+        time.sleep(2)
+        drive.on_for_degrees(10, 5, 720)
+        time.sleep(2)
+        drive.on_for_degrees(10, 20, 720)
+        time.sleep(2)
+        drive.on_for_rotations(10, 20, 2)
+        time.sleep(2)
+        drive.on_for_degrees(20, 10, 720)
+        time.sleep(2)
+        ##if action_type == 'rotations':
+          ##  drive.on_for_rotations(SpeedPercent(speed1), SpeedPercent(speed2), rotations)
+          ##  self.update_state(speed1, speed2, rotations, action_type)
+        ##if action_type == 'spin':
+          ##  drive.on_for_rotations(SpeedPercent(speed1), SpeedPercent(-speed1), rotations)
+            ##self.update_state(speed1, speed2, rotations, action_type)
+        time.sleep(2)
+
+

@@ -13,10 +13,6 @@ drive = MoveTank(OUTPUT_B, OUTPUT_C)
 ga = GoalAgent()
 
 ga.move('spin', 10, 10, 1.5)
-<<<<<<< HEAD
-#ss
-=======
 
->>>>>>> 353b2604f1d345f1e85cde8d2812ff0d9012b53e
 
 
