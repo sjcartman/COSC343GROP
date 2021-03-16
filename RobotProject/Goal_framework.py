@@ -17,14 +17,15 @@ class GoalAgent:
         self.angle = 90
         self.current_square = None
 
-    def transition_model(self, speed1, speed2, rotation, type):
+    def transition_model(self, speed1, speed2, rotation, action_type):
         """Transition model method that updates state values based on actions performed."""
         # Note that updating is not instant, but each action should be done with a small time step to make it seem so.
         # Placeholder algorithm values.
-        if self.angle == 90:
+        if action_type == 'rotations':
             self.xy[0] = rotation * 2
-        # self.angle = rotation*3.14
-        return self.xy
+        elif action_type == 'spin':
+            self.angle = 
+
 
     def xy_square_conversion(self, light_input):
         """Conversion method that converts current xy position to current black square position."""
@@ -50,14 +51,19 @@ class GoalAgent:
     def action(self, action_step):
         action_list.append(action_step)"""
 
-    def update_state(self, speed1, speed2, rotations, type):
-        coordinates = self.transition_model(speed1, speed2, rotations, type)
-        print(coordinates)
+    def update_state(self, speed1, speed2, rotations, action_type):
+        if action_type == 'rotations':
+            self.transition_model(speed1, speed2, rotations, action_type)
+            print(self.xy)
+        elif action_type == 'spin':
+            self.transition_model(speed1, speed2, rotations, action_type)
+            print(self.angle)
 
-    def move(self, type, speed1, speed2, rotations):
-        if type == "rotations":
+
+    def move(self, action_type, speed1, speed2, rotations):
+        if action_type == 'rotations':
             drive.on_for_rotations(SpeedPercent(speed1), SpeedPercent(speed2), rotations)
-            self.update_state(speed1, speed2, rotations, type)
-        if type == "spin":
+            self.update_state(speed1, speed2, rotations, action_type)
+        if action_type == 'spin':
             drive.on_for_rotations(SpeedPercent(speed1), SpeedPercent(-speed2), rotations)
-            self.update_state(speed1, speed2, rotations, type)
+            self.update_state(speed1, speed2, rotations, action_type)
