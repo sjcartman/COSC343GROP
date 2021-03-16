@@ -29,8 +29,6 @@ class GoalAgent:
             else:
                 self.angle = (self.angle - rotation)
 
-
-
     def xy_square_conversion(self, light_input):
         """Conversion method that converts current xy position to current black square position."""
         square = self.xy[0] + self.xy[1] % 12
@@ -63,10 +61,12 @@ class GoalAgent:
             self.transition_model(speed1, speed2, rotations, action_type)
             print(self.angle)
 
-    def move(self, action_type, speed1, speed2, rotations):
+    def move(self, action_type, speed1, speed2, rotations, rotation_angle=None):
         if action_type == 'rotations':
             drive.on_for_rotations(SpeedPercent(speed1), SpeedPercent(speed2), rotations)
             self.update_state(speed1, speed2, rotations, action_type)
         if action_type == 'spin':
             drive.on_for_rotations(SpeedPercent(speed1), SpeedPercent(-speed1), rotations)
             self.update_state(speed1, speed2, rotations, action_type)
+        if action_type == 'rotate_for':
+            drive.on_for_rotations(SpeedPercent(speed1), SpeedPercent(-(rotation_angle/180)*speed1), rotations)
