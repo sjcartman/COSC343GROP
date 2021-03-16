@@ -69,4 +69,4 @@ class GoalAgent:
             drive.on_for_rotations(SpeedPercent(speed1), SpeedPercent(-speed1), rotations)
             self.update_state(speed1, speed2, rotations, action_type)
         if action_type == 'rotate_for':
-            drive.on_for_rotations(SpeedPercent(speed1), SpeedPercent(-(rotation_angle/180)*speed1), rotations)
+            drive.on_for_rotations(SpeedPercent(speed1), SpeedPercent(-(rotation_angle/180)*speed1), 1)
