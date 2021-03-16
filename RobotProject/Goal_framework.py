@@ -30,8 +30,6 @@ class GoalAgent:
             else:
                 self.angle = (self.angle - rotation)
 
-
-
     def xy_square_conversion(self, light_input):
         """Conversion method that converts current xy position to current black square position."""
         square = self.xy[0] + self.xy[1] % 12
@@ -64,27 +62,19 @@ class GoalAgent:
             self.transition_model(speed1, speed2, rotations, action_type)
             print(self.angle)
 
-    def move(self, action_type, speed1, speed2, rotations):
-        drive.on_for_degrees(10, -10, 360)
-        time.sleep(2)
-        drive.on_for_degrees(5,10,720)
-        time.sleep(2)
-        drive.on_for_rotations(5, 10, 2)
-        time.sleep(2)
-        drive.on_for_degrees(10, 5, 720)
-        time.sleep(2)
-        drive.on_for_degrees(10, 20, 720)
-        time.sleep(2)
-        drive.on_for_rotations(10, 20, 2)
-        time.sleep(2)
-        drive.on_for_degrees(20, 10, 720)
-        time.sleep(2)
-        ##if action_type == 'rotations':
-          ##  drive.on_for_rotations(SpeedPercent(speed1), SpeedPercent(speed2), rotations)
-          ##  self.update_state(speed1, speed2, rotations, action_type)
-        ##if action_type == 'spin':
-          ##  drive.on_for_rotations(SpeedPercent(speed1), SpeedPercent(-speed1), rotations)
-            ##self.update_state(speed1, speed2, rotations, action_type)
-        time.sleep(2)
 
+    def move(self, action_type, speed1, speed2 = 1, rotations = 1, rotation_angle=None):
+        if action_type == 'rotations':
+            drive.on_for_rotations(SpeedPercent(speed1), SpeedPercent(speed2), rotations)
+            self.update_state(speed1, speed2, rotations, action_type)
+        if action_type == 'spin':
+            drive.on_for_rotations(SpeedPercent(speed1), SpeedPercent(-speed1), rotations)
+            self.update_state(speed1, speed2, rotations, action_type)
+        #if action_type == 'rotate_for':
+
+    def left(self):
+        drive.on_for_degrees(-41, 40, 180)
+
+    def right(self):
+        drive.on_for_degrees(40, -41, 180)
 
