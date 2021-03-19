@@ -12,8 +12,9 @@ drive = MoveTank(OUTPUT_B, OUTPUT_C)
 
 ga = GoalAgent()
 
-ga.move('spin', 10, 10, 1)
-ga.move('rotate_for', 10, rotation_angle=90)
+#ga.move('spin', 10, 10, 1)
+ga.left()
+ga.right()
 
 
 

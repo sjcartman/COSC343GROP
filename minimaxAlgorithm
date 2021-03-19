@@ -1,0 +1,66 @@
+# Import the tictactoe class
+from tictactoe import tictactoe
+import numpy as np
+# Import the random number generation library
+import random
+
+# Create a subclass of tictactoe with an implementation of
+# the agent_move function
+class mygame(tictactoe):
+
+    def agent_move(self, state):
+        """agent move function that decides on the next move to make based on min-max algorithm"""
+        # returns a 3D list of all the next possible states. Also removes any symmetries.
+        next_state = self.remove_symmetries(self.max_possible_moves(state))
+        # creates empty list to append to.
+        best_result = []
+        # runs through all states created previously.
+        for s in next_state:
+            # appends the best_results returned from min_move and max_move functions. Depth of 5.
+            best_result.append(self.min_move(s, 5))
+        # calculates the index of the maximum result.
+        i = np.argmax(best_result)
+        # returns the state with the maximum result.
+        return next_state[i]
+
+    def min_move(self, state, depth):
+        """min_move function that analyzes the opponents moves, choosing the one with the
+        lowest score (what the opponent would do)."""
+        # base case that terminates if game is over or depth is 0
+        if self.terminal(state) or depth == 0:
+            # returns the evaluation of that terminal or depth=0 state
+            return self.evaluate(state)
+        # returns a 3D list of all the possible moves, from opponents perspective.
+        next_state = self.remove_symmetries(self.min_possible_moves(state))
+        # empty list.
+        low_score = []
+        # runs through all states in new 3D list.
+        for s in next_state:
+            # adds each returned value to low_score list.
+            low_score.append(self.max_move(s, depth-1))
+        # returns the minimum score in the list.
+        return low_score[np.argmin(low_score)]
+
+    def max_move(self, state, depth):
+        # base case that terminates if game is over or depth is 0
+        if self.terminal(state) or depth == 0:
+            # returns the evaluation of that terminal or depth=0 state
+            return self.evaluate(state)
+        # returns a 3D list of all the possible moves, from agents perspective.
+        next_state = self.remove_symmetries(self.max_possible_moves(state))
+        # empty list.
+        max_score = []
+        # runs through all states in new 3D list.
+        for s in next_state:
+            # adds each returned value to max_score list.
+            max_score.append(self.min_move(s, depth-1))
+        # returns the maximum score in the list.
+        return max_score[np.argmax(max_score)]
+
+
+# Play this indefinitely
+while True:
+    # Run a game where the human makes the first move
+    mygame(opponent="x")
+    # Run a game where the computer makes the first move
+    mygame(opponent="o")
