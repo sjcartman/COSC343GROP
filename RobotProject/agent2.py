@@ -11,6 +11,7 @@ ga.calibrate_forward()
 ga.calibrate_forward()
 ga.calibrate_forward()
 
+# rotation calls. Each rotation call should move through white to black, and then through black to the next white. But there is currently trouble at the end to resolve.
 print("rotation 1")
 ga.calibrate_rotation()
 print("rotation 2")
