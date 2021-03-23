@@ -70,11 +70,28 @@ class GoalAgent:
         if action_type == 'spin':
             drive.on_for_rotations(SpeedPercent(speed1), SpeedPercent(-speed1), rotations)
             self.update_state(speed1, speed2, rotations, action_type)
-        #if action_type == 'rotate_for':
-
-    def left(self):
-        drive.on_for_degrees(-41, 40, 180)
+        #if action_type == 'rotate_for':sssss
 
     def right(self):
-        drive.on_for_degrees(40, -41, 180)
+        drive.on_for_rotations(13, 0, 0.95)
+        self.straight_backward(0.525)
+        return
+
+    def straight_backward(self,rots):
+        drive.on_for_rotations(-10,-10,rots)
+
+    def left(self):
+        drive.on_for_rotations(0, 13, 0.95)
+        self.straight_backward(0.525)
+
+        return
+    def straight_horizontal_one_tile(self):
+        drive.on_for_rotations(20,20,1.18)
+    def straight_vertical_one_tile(self):
+        drive.on_for_rotations(20,19,0.975)
+    def var_forward(self, value):
+        drive.on_for_rotations(20,20,value)
+
+
+
 
