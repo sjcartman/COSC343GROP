@@ -6,7 +6,7 @@ import Movements4 as m
 import time
 
 # s
-speaker = Sound()
+speaker = Sound
 mLeft = LargeMotor(OUTPUT_B)
 mRight = LargeMotor(OUTPUT_C)
 cs = ColorSensor()
