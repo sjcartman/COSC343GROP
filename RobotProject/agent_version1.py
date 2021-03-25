@@ -1,18 +1,12 @@
 #!/usr/bin/env python3
 from ev3dev2.motor import LargeMotor, OUTPUT_B, OUTPUT_C, SpeedPercent, MoveTank
 from ev3dev2.sound import Sound
-from ev3dev2.sensor.lego import ColorSensor, TouchSensor, UltrasonicSensor
+from ev3dev2.sensor.lego import ColorSensor
 from Goal_framework import GoalAgent
-import time
 
 
-
-speaker = Sound()
 mLeft = LargeMotor(OUTPUT_B)
 mRight = LargeMotor(OUTPUT_C)
-cs = ColorSensor()
-ts = TouchSensor()
-us = UltrasonicSensor()
 drive = MoveTank(OUTPUT_B, OUTPUT_C)
 #global
 turn_left_on_grey = False
@@ -121,9 +115,7 @@ while True:
         elif (light < 15 and flip) or ((light > 45 and not flip)and not vert) or ((light > 20 and not flip)and vert): # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
             flip = go(light,flip)
 
-        elif light > 20 and light < 35 and not vert : # check if light level is between 20 and 35
-            turn_left_on_grey = grey_correction(light,turn_left_on_grey)
-        light = 0#reset light
+ga.move('rotations', 10, 10, 1.5)
 
 
             
