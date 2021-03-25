@@ -52,7 +52,7 @@ class GoalAgent:
             action = #search for tower
     #
     def action(self, action_step):
-        action_list.append(action_step)s"""
+        action_list.append(action_step)ssss"""
 
     def update_state(self, speed1, speed2, rotations, action_type):
         if action_type == 'rotations':
