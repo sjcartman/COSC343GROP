@@ -10,7 +10,7 @@ drive = MoveTank(OUTPUT_B, OUTPUT_C)
 
 
 class GoalAgent:
-    """The class for all goal agent methods and attributes."""
+    """The class for all goal agent methods and attributess."""
 
     def __init__(self):
         """Initiating method that sets starting position and angle."""
@@ -70,21 +70,20 @@ class GoalAgent:
         if action_type == 'spin':
             drive.on_for_rotations(SpeedPercent(speed1), SpeedPercent(-speed1), rotations)
             self.update_state(speed1, speed2, rotations, action_type)
-        #if action_type == 'rotate_for':sssss
+        #if action_type == 'rotate_for':sssssssssssss
 
     def right9(self):
-        drive.on_for_rotations(13, 0, 0.095)
+        drive.on_for_rotations(13, -13, 0.045/2)
         #self.straight_backward(0.525)
         return
     def left9(self):
-        drive.on_for_rotations(0, 13, 0.095)
+        drive.on_for_rotations(-13, 13, 0.045/1.8)
         #self.straight_backward(0.525)
         return
 
 
     def right90(self):
-        drive.on_for_rotations(13, 0, 0.95)
-        self.straight_backward(0.525)
+        drive.on_for_rotations(13, -13, 0.95/2)
         return
 
     def straight_backward(self,rots):

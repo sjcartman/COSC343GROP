@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from ev3dev2.motor import LargeMotor, OUTPUT_B, OUTPUT_C, SpeedPercent, MoveTank
 from ev3dev2.sound import Sound
-from ev3dev2.sensor.lego import ColorSensor, TouchSensor
+from ev3dev2.sensor.lego import ColorSensor, TouchSensor, UltrasonicSensor
 from Goal_framework import GoalAgent
 import time
 
@@ -12,62 +12,106 @@ mLeft = LargeMotor(OUTPUT_B)
 mRight = LargeMotor(OUTPUT_C)
 cs = ColorSensor()
 ts = TouchSensor()
+us = UltrasonicSensor()
 drive = MoveTank(OUTPUT_B, OUTPUT_C)
-flip = True
+#global
 turn_left_on_grey = False
-count = 0
 ga = GoalAgent()
 vert = False
+distance = []
 #ga.move('spin', 10, 10, 1)
-ga.var_forward(0.8)
+
+
+
+#the first turn to go towards the bottle
+def turn_one(light1):
+        global vert
+        global count
+
+        print("s " + str(light1) + " " + str(count))#print my info
+
+        drive.off()#stop
+        ga.var_forward(0.45)
+        time.sleep(1)#waits
+
+        ga.right90()# turn 90 degs to the right
+        #count = count + 15
+        vert = True
+
+
+# go forward, and check for tiles
+def go(light1,flip1):
+    global count
+    global vert
+    print("e " + str(light1) + " "+str(count))
+    # drive.off()ssss
+    # time.sleep(.5)sss
+
+    # if we have changed from white to black increase and say count
+    if flip1:
+        count += 1
+
+        if vert:# check if we are going vericaly as count will need to be increamented by a larger amountssssss
+            count += 14
+        drive.off()
+        #time.sleep(2)
+        speaker.speak(str(count))
+        #drive.on()
+
+    if count == 56:
+        quit()#exit once at square 56
+    return not flip1
+
+#method too turn off the grey
+def grey_correction (light1,turn_left_on_grey1):
+    global count
+    print("y " + str(light1) + " " + str(count))
+    drive.off()
+    time.sleep(.5)
+
+    if turn_left_on_grey1:#check which way we turned last time and turn the other way
+        ga.right9()
+
+    else:
+        ga.left9()
+    return not turn_left_on_grey1 # return which way to turn next time
+
+#move onto black from startsss
+ga.var_forward(0.85)
 ga.right90()
-index = 0
-light = 0
+
+#main loop
+index = 0 # counter to keep track of the number of times loops runs. Used to get averages of cs.reflected_light_intensity
+light = 0 # a var to store these averages
+count = 0
+flip = True
+
 while True:
-    index += 1
+
+    #update light
+    index += 1#
     light += cs.reflected_light_intensity
 
-    if index % 10 == 0:
-        light = light / 10
+    if index % 10 == 0:#every 10 times do this block
+        light = light / 10# divide light by 10 to get the current average
 
-        if ts.is_pressed:
+        if ts.is_pressed:#not my code needs to be commeted :)
             drive.off()
             break
+        drive.on(SpeedPercent(20), SpeedPercent(19.9))#go forward
 
-        drive.on(SpeedPercent(20), SpeedPercent(20))
+        if count == 11 and not vert:# check if we have moved 11 squares forward
+            turn_one(light)
 
-        if count == 11 and not vert:
-            print("s " + str(cs.reflected_light_intensity) + " " + str(count))
-            drive.off()
-            time.sleep(1)
-            ga.right90()
-            #count = count + 15
-            vert = True
 
-            print("e " + str(cs.reflected_light_intensity) + " " + str(count))
-            #drive.off()ss
-            #time.sleep(.5)
+        elif (light < 15 and flip) or ((light > 45 and not flip)and not vert) or (light > 20 and not flip): # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
+            flip = go(light,flip)
 
-            if flip:
-                count = count + 1
+        elif light > 20 and light < 35 and not vert : # check if light level is between 20 and 35
+            turn_left_on_grey = grey_correction(light,turn_left_on_grey)
+        light = 0#reset light
 
-                if vert:
-                    count = count + 14
-                speaker.speak(str(count))
+        if count==56:
+            
 
-            if count == 56:
-                break
-            flip = not flip
-
-        elif light > 30 and light < 50 :
-            print("y " + str(light) + " " + str(count))
-            drive.off()
-            time.sleep(.5)
-
-            if turn_left_on_grey :
-                ga.right9()
-
-            else :
-                ga.left9()
-            turn_left_on_grey = not turn_left_on_grey
 
