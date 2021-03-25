@@ -73,12 +73,12 @@ class GoalAgent:
         #if action_type == 'rotate_for':sssssssssssss
 
     def right9(self):
-        drive.on_for_rotations(13, -13, 0.045/2)
+        drive.on_for_rotations(13, -13, 0.06/2)
         #self.straight_backward(0.525)
         return
     def left9(self):
-        drive.on_for_rotations(-13, 13, 0.045/1.8)
-        #self.straight_backward(0.525)
+        drive.on_for_rotations(-13, 13, 0.06/2)
+        #self.straight_backward(0.525)ss
         return
 
 
