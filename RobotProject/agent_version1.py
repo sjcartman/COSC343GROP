@@ -44,9 +44,8 @@ while True:
             #count = count + 15
             vert = True
 
-        elif (light < 10 and flip) or (light > 60 and not flip):
             print("e " + str(cs.reflected_light_intensity) + " " + str(count))
-            #drive.off()
+            #drive.off()ss
             #time.sleep(.5)
 
             if flip:
@@ -60,7 +59,7 @@ while True:
                 break
             flip = not flip
 
-        elif light > 20 and light < 50 :
+        elif light > 30 and light < 50 :
             print("y " + str(light) + " " + str(count))
             drive.off()
             time.sleep(.5)
