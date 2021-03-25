@@ -69,7 +69,7 @@ def grey_correction (light1,turn_left_on_grey1):
     drive.off()
     time.sleep(.5)
 
-    if turn_left_on_grey1:#check which way we turned last time and turn the other way
+    if turn_left_on_grey1:#check which way we turned last time and turn the other way––
         ga.right9()
 
     else:
