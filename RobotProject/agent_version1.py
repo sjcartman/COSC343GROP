@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from ev3dev2.motor import LargeMotor, OUTPUT_B, OUTPUT_C, SpeedPercent, MoveTank
 from ev3dev2.sound import Sound
-from ev3dev2.sensor.lego import ColorSensor, TouchSensor
+from ev3dev2.sensor.lego import ColorSensor, TouchSensor, UltrasonicSensor
 from Goal_framework import GoalAgent
 import time
 
@@ -12,11 +12,13 @@ mLeft = LargeMotor(OUTPUT_B)
 mRight = LargeMotor(OUTPUT_C)
 cs = ColorSensor()
 ts = TouchSensor()
+us = UltrasonicSensor()
 drive = MoveTank(OUTPUT_B, OUTPUT_C)
 #global
 turn_left_on_grey = False
 ga = GoalAgent()
 vert = False
+distance = []
 #ga.move('spin', 10, 10, 1)
 
 
@@ -29,11 +31,11 @@ def turn_one(light1):
         print("s " + str(light1) + " " + str(count))#print my info
 
         drive.off()#stop
-
+        ga.var_forward(0.45)
         time.sleep(1)#waits
 
         ga.right90()# turn 90 degs to the right
-        count = count + 15
+        #count = count + 15
         vert = True
 
 
@@ -75,7 +77,7 @@ def grey_correction (light1,turn_left_on_grey1):
     return not turn_left_on_grey1 # return which way to turn next time
 
 #move onto black from startsss
-ga.var_forward(0.8)
+ga.var_forward(0.85)
 ga.right90()
 
 #main loop
@@ -96,18 +98,20 @@ while True:
         if ts.is_pressed:#not my code needs to be commeted :)
             drive.off()
             break
-
-        drive.on(SpeedPercent(20), SpeedPercent(20))#go forward
+        drive.on(SpeedPercent(20), SpeedPercent(19.9))#go forward
 
         if count == 11 and not vert:# check if we have moved 11 squares forward
             turn_one(light)
 
 
-        elif (light < 15 and flip) or (light > 45 and not flip): # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
+        elif (light < 15 and flip) or ((light > 45 and not flip)and not vert) or (light > 20 and not flip): # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
             flip = go(light,flip)
 
         elif light > 20 and light < 35 and not vert : # check if light level is between 20 and 35
             turn_left_on_grey = grey_correction(light,turn_left_on_grey)
         light = 0#reset light
+
+        if count==56:
+            
 
 
