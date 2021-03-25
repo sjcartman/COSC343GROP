@@ -15,7 +15,7 @@ class GoalAgent:
 
     def __init__(self):
         """Initiating method that sets starting position and angle."""
-        # The field is approximately 12x12 squares, we can consider each square to be 10x10 units
+        # The field is approximately 12x12 squares, we can consider each square to be 10x10 unitsss
         # Using this, the bot starts at position [15, 100]
         self.cs = ColorSensor()
         self.xy = [15, 100]

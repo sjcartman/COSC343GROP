@@ -52,7 +52,7 @@ class GoalAgent:
             action = #search for tower
     #
     def action(self, action_step):
-        action_list.append(action_step)"""
+        action_list.append(action_step)s"""
 
     def update_state(self, speed1, speed2, rotations, action_type):
         if action_type == 'rotations':
@@ -72,7 +72,17 @@ class GoalAgent:
             self.update_state(speed1, speed2, rotations, action_type)
         #if action_type == 'rotate_for':sssss
 
-    def right(self):
+    def right9(self):
+        drive.on_for_rotations(13, 0, 0.095)
+        #self.straight_backward(0.525)
+        return
+    def left9(self):
+        drive.on_for_rotations(0, 13, 0.095)
+        #self.straight_backward(0.525)
+        return
+
+
+    def right90(self):
         drive.on_for_rotations(13, 0, 0.95)
         self.straight_backward(0.525)
         return
@@ -80,7 +90,7 @@ class GoalAgent:
     def straight_backward(self,rots):
         drive.on_for_rotations(-10,-10,rots)
 
-    def left(self):
+    def left90(self):
         drive.on_for_rotations(0, 13, 0.95)
         self.straight_backward(0.525)
 
