@@ -1,20 +1,17 @@
 #!/usr/bin/env python3
 from ev3dev2.motor import LargeMotor, OUTPUT_B, OUTPUT_C, SpeedPercent, MoveTank
 from ev3dev2.sound import Sound
-from ev3dev2.sensor.lego import ColorSensor, TouchSensor, UltrasonicSensor
+from ev3dev2.sensor.lego import ColorSensor
 from Goal_framework import GoalAgent
+<<<<<<< HEAD
 import time
 import numpy as np
+=======
+>>>>>>> 92297f575d90c7d71f5b6f45298bb00631e10f20
 
 
-
-speaker = Sound()
 mLeft = LargeMotor(OUTPUT_B)
 mRight = LargeMotor(OUTPUT_C)
-cs = ColorSensor()
-ts = TouchSensor()
-us = UltrasonicSensor()
-us.mode = 'US_SI_CM'
 drive = MoveTank(OUTPUT_B, OUTPUT_C)
 #global
 turn_left_on_grey = False
@@ -53,7 +50,7 @@ def go(light1,flip1):
     if flip1:
         count += 1
 
-        if vert:# check if we are going vericaly as count will need to be increamented by a larger amountssssss
+        if vert: # check if we are going vertically as count will need to be increamented by a larger amountssssss
             count += 14
         drive.off()
         #time.sleep(2)
@@ -61,6 +58,7 @@ def go(light1,flip1):
         #drive.on()
 
     if count == 56:
+<<<<<<< HEAD
         #quit()#exit once at square 56
         move = 0
         # quit()#exit once at square 56
@@ -69,22 +67,39 @@ def go(light1,flip1):
         else:
             move_to_column(distance)
 
+=======
+        drive.off() #Stops at 56
+        bottle_search()
+>>>>>>> 92297f575d90c7d71f5b6f45298bb00631e10f20
     return not flip1
+
+# method to search for the bottle
+def bottle_search():
+    goal = False
+    while not goal:
+        d1 = us.distance_centimeters
+        ga.left90()
+        drive.on(SpeedPercent(20), SpeedPercent(19.9))#go forward
+        if (light < 15 and flip) or ((light > 45 and not flip)and not vert) or ((light > 20 and not flip)and vert): # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
+            flip = go(light,flip)
+
+
 
 #method too turn off the grey
 def grey_correction (light1,turn_left_on_grey1):
     global count
-    print("y " + str(light1) + " " + str(count))vim
+    print("y " + str(light1) + " " + str(count))
     drive.off()
     time.sleep(.5)
 
-    if turn_left_on_grey1:#check which way we turned last time and turn the other way––
+    if turn_left_on_grey1:#check which way we turned last time and turn the other way
         ga.right9()
 
     else:
         ga.left9()
     return not turn_left_on_grey1 # return which way to turn next time
 
+<<<<<<< HEAD
 def find_bottle_with_list():
     check = 0
     global flip
@@ -114,17 +129,20 @@ def move_to_column(list):
             drive.on_for_seconds(SpeedPercent(20), SpeedPercent(20), (approx_max_speed*0.2)/dist)
             quit()
 
+=======
+>>>>>>> 92297f575d90c7d71f5b6f45298bb00631e10f20
 #move onto black from startsss
 ga.var_forward(0.85)
 ga.right90()
 
 #main loop
 index = 0 # counter to keep track of the number of times loops runs. Used to get averages of cs.reflected_light_intensity
-light = 0 # a var to store these averagess
+light = 0 # a var to store these averages
 count = 0
 flip = True
 
 while True:
+    """change gray correction back."""
 
     #update light
     index += 1#
@@ -133,22 +151,21 @@ while True:
     if index % 10 == 0:#every 10 times do this block
         light = light / 10# divide light by 10 to get the current average
 
-        if ts.is_pressed:#not my code needs to be commeted :s)
+        if ts.is_pressed:#not my code needs to be commeted :)
             drive.off()
             break
-        if vert:
-            drive.on(SpeedPercent(20), SpeedPercent(20))#go forwards
-        else:
-            drive.on(SpeedPercent(20), SpeedPercent(19.9))
+        drive.on(SpeedPercent(20), SpeedPercent(19.9))#go forward
+
         if count == 11 and not vert:# check if we have moved 11 squares forward
             turn_one(light)
 
 
-        elif (light < 15 and flip) or ((light > 45 and not flip)and not vert) or (light > 20 and not flip): # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
+        elif (light < 15 and flip) or ((light > 45 and not flip)and not vert) or ((light > 20 and not flip)and vert): # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
             flip = go(light,flip)
 
-        elif light > 20 and light < 35 and not vert : # check if light level is between 20 and 35
-            turn_left_on_grey = grey_correction(light,turn_left_on_grey)
-        light = 0#reset light
+ga.move('rotations', 10, 10, 1.5)
+
+
+            
 
 
