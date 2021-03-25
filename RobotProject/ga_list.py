@@ -61,10 +61,9 @@ def go(light1,flip1):
         #drive.on()
 
     if count == 56:
-        #quit()#exit once at square 56
         move = 0
-        # quit()#exit once at square 56
-        if move < 3:
+        #quit()#exit once at square 56
+        if move<3:
             find_bottle_with_list()
         else:
             move_to_column(distance)
@@ -74,7 +73,7 @@ def go(light1,flip1):
 #method too turn off the grey
 def grey_correction (light1,turn_left_on_grey1):
     global count
-    print("y " + str(light1) + " " + str(count))vim
+    print("y " + str(light1) + " " + str(count))
     drive.off()
     time.sleep(.5)
 
