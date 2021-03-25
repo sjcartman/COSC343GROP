@@ -43,3 +43,5 @@ def left90():
 
 def right90():
     drive.on_for_rotations(13, -13, 0.95 / 2)
+ 
+# todo: make left90 and right90 automatically update current_travel_direction.
