@@ -13,6 +13,7 @@ mRight = LargeMotor(OUTPUT_C)
 cs = ColorSensor()
 ts = TouchSensor()
 us = UltrasonicSensor()
+us.mode = 'US_SI_CM'
 drive = MoveTank(OUTPUT_B, OUTPUT_C)
 #global
 turn_left_on_grey = False
@@ -76,6 +77,17 @@ def grey_correction (light1,turn_left_on_grey1):
         ga.left9()
     return not turn_left_on_grey1 # return which way to turn next time
 
+def find_bottle_with_list():
+    check = 0
+    global flip
+    distance.append(us.distance_centimeters)
+    ga.left90()
+    if check<2 and flip:
+        check += 1
+    else:
+        drive.off()
+        find_bottle_with_list()
+
 #move onto black from startsss
 ga.var_forward(0.85)
 ga.right90()
@@ -111,7 +123,5 @@ while True:
             turn_left_on_grey = grey_correction(light,turn_left_on_grey)
         light = 0#reset light
 
-        if count==56:
-            
 
 
