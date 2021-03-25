@@ -94,7 +94,7 @@ ga.right90()
 
 #main loop
 index = 0 # counter to keep track of the number of times loops runs. Used to get averages of cs.reflected_light_intensity
-light = 0 # a var to store these averages
+light = 0 # a var to store these averagess
 count = 0
 flip = True
 
@@ -107,11 +107,13 @@ while True:
     if index % 10 == 0:#every 10 times do this block
         light = light / 10# divide light by 10 to get the current average
 
-        if ts.is_pressed:#not my code needs to be commeted :)
+        if ts.is_pressed:#not my code needs to be commeted :s)
             drive.off()
             break
-        drive.on(SpeedPercent(20), SpeedPercent(19.9))#go forward
-
+        if vert:
+            drive.on(SpeedPercent(20), SpeedPercent(20))#go forwards
+        else:
+            drive.on(SpeedPercent(20), SpeedPercent(19.9))
         if count == 11 and not vert:# check if we have moved 11 squares forward
             turn_one(light)
 
@@ -122,6 +124,5 @@ while True:
         elif light > 20 and light < 35 and not vert : # check if light level is between 20 and 35
             turn_left_on_grey = grey_correction(light,turn_left_on_grey)
         light = 0#reset light
-
 
 
