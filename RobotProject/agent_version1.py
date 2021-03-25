@@ -23,33 +23,38 @@ vert = False
 
 #the first turn to go towards the bottle
 def turn_one(light1):
+        global vert
+        global count
 
         print("s " + str(light1) + " " + str(count))#print my info
 
         drive.off()#stop
 
-        time.sleep(1)#wait
+        time.sleep(1)#waits
 
         ga.right90()# turn 90 degs to the right
-        # count = count + 15sssssss
+        count = count + 15
         vert = True
 
 
-#go forward, and check for tiles
+# go forward, and check for tiles
 def go(light1,flip1):
     global count
+    global vert
     print("e " + str(light1) + " "+str(count))
     # drive.off()ssss
     # time.sleep(.5)sss
 
-    #if we have changed from white to black increase and say count
+    # if we have changed from white to black increase and say count
     if flip1:
         count += 1
 
-        if vert:#check if we are going vericaly as count will need to be increamented by a larger amount
+        if vert:# check if we are going vericaly as count will need to be increamented by a larger amountssssss
             count += 14
-        time.sleep(2)
+        drive.off()
+        #time.sleep(2)
         speaker.speak(str(count))
+        #drive.on()
 
     if count == 56:
         quit()#exit once at square 56
@@ -69,7 +74,7 @@ def grey_correction (light1,turn_left_on_grey1):
         ga.left9()
     return not turn_left_on_grey1 # return which way to turn next time
 
-#move onto black from startss
+#move onto black from startsss
 ga.var_forward(0.8)
 ga.right90()
 
@@ -101,7 +106,7 @@ while True:
         elif (light < 15 and flip) or (light > 45 and not flip): # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
             flip = go(light,flip)
 
-        elif light > 20 and light < 35 : # check if light level is between 20 and 35
+        elif light > 20 and light < 35 and not vert : # check if light level is between 20 and 35
             turn_left_on_grey = grey_correction(light,turn_left_on_grey)
         light = 0#reset light
 

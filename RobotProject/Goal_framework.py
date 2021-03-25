@@ -83,7 +83,7 @@ class GoalAgent:
 
 
     def right90(self):
-        drive.on_for_rotations(13, 0, 0.95)
+        drive.on_for_rotations(13, -13, 0.95/2)
         self.straight_backward(0.525)
         return
 
