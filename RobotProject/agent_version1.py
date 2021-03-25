@@ -21,41 +21,54 @@ vert = False
 #ga.move('spin', 10, 10, 1)
 ga.var_forward(0.8)
 ga.right90()
-#s
+index = 0
+light = 0
 while True:
-    if ts.is_pressed:
-        drive.off()
-        break
+    index += 1
+    light += cs.reflected_light_intensity
 
-    value = 0
-    drive.on(SpeedPercent(20), SpeedPercent(20))
-    if count == 11 and not vert:
-        print("s " + str(cs.reflected_light_intensity) + " " + str(count))
-        drive.off()
-        time.sleep(1)
-        ga.right90()
-        #count = count + 15
-        vert = True
-    elif (cs.color == 1 and flip) or (cs.color == 6 and not flip):
-        print("e " + str(cs.reflected_light_intensity) + " " + str(count))
-        #drive.off()
-        #time.sleep(.5)
-        if flip:
-            count = count + 1
-            if vert:
-                count = count + 14
-            speaker.speak(str(count))
-        if count == 56:
+    if index % 10 == 0:
+        light = light / 10
+
+        if ts.is_pressed:
+            drive.off()
             break
-        flip = not flip
 
-    #elif cs.reflected_light_intensity > 30 and cs.reflected_light_intensity < 40 and value %10 == 0:
-     #   print("y " + str(cs.reflected_light_intensity) + " " + str(count))
-      #  drive.off()
-       # time.sleep(.5)
-        #if turn_left_on_grey :
-         #   ga.right9()
-        #else :
-         #   ga.left9()
-        #turn_left_on_grey = not turn_left_on_grey
+        drive.on(SpeedPercent(20), SpeedPercent(20))
+
+        if count == 11 and not vert:
+            print("s " + str(cs.reflected_light_intensity) + " " + str(count))
+            drive.off()
+            time.sleep(1)
+            ga.right90()
+            #count = count + 15
+            vert = True
+
+        elif (light < 10 and flip) or (light > 60 and not flip):
+            print("e " + str(cs.reflected_light_intensity) + " " + str(count))
+            #drive.off()
+            #time.sleep(.5)
+
+            if flip:
+                count = count + 1
+
+                if vert:
+                    count = count + 14
+                speaker.speak(str(count))
+
+            if count == 56:
+                break
+            flip = not flip
+
+        elif light > 20 and light < 50 :
+            print("y " + str(light) + " " + str(count))
+            drive.off()
+            time.sleep(.5)
+
+            if turn_left_on_grey :
+                ga.right9()
+
+            else :
+                ga.left9()
+            turn_left_on_grey = not turn_left_on_grey
 
