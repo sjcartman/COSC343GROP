@@ -4,6 +4,7 @@ from ev3dev2.sound import Sound
 from ev3dev2.sensor.lego import ColorSensor, TouchSensor, UltrasonicSensor
 from Goal_framework import GoalAgent
 import time
+import numpy as np
 
 
 
@@ -60,17 +61,23 @@ def go(light1,flip1):
         #drive.on()
 
     if count == 56:
-        quit()#exit once at square 56
+        move = 0
+        #quit()#exit once at square 56
+        if move<3:
+            find_bottle_with_list()
+        else:
+            move_to_column(distance)
+
     return not flip1
 
 #method too turn off the grey
 def grey_correction (light1,turn_left_on_grey1):
     global count
-    print("y " + str(light1) + " " + str(count))
+    print("y " + str(light1) + " " + str(count))vim
     drive.off()
     time.sleep(.5)
 
-    if turn_left_on_grey1:#check which way we turned last time and turn the other way
+    if turn_left_on_grey1:#check which way we turned last time and turn the other way––
         ga.right9()
 
     else:
@@ -85,8 +92,26 @@ def find_bottle_with_list():
     if check<2 and flip:
         check += 1
     else:
+        ga.right90()
         drive.off()
-        find_bottle_with_list()
+
+def move_to_column(list):
+    approx_max_speed = 1500
+    ind = np.argmin(list) + 1
+    dist = min(list)
+    bl = 0
+
+    if ind == 3:
+        drive.on_for_seconds(SpeedPercent(20), SpeedPercent(20), (approx_max_speed*0.2)/dist)
+        quit()
+    else:
+        ga.right90()
+        if bl<ind*2 and flip:
+            bl+=1
+        else:
+            ga.left90()
+            drive.on_for_seconds(SpeedPercent(20), SpeedPercent(20), (approx_max_speed*0.2)/dist)
+            quit()
 
 #move onto black from startsss
 ga.var_forward(0.85)
