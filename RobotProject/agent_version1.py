@@ -66,7 +66,7 @@ def go(light1,flip1):
 #method too turn off the grey
 def grey_correction (light1,turn_left_on_grey1):
     global count
-    print("y " + str(light1) + " " + str(count))
+    print("y " + str(light1) + " " + str(count))vim
     drive.off()
     time.sleep(.5)
 
