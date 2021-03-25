@@ -90,8 +90,8 @@ class GoalAgent:
         drive.on_for_rotations(-10,-10,rots)
 
     def left90(self):
-        drive.on_for_rotations(0, 13, 0.95)
-        self.straight_backward(0.525)
+        drive.on_for_rotations(-13, 13, 0.95 / 2)
+        return
 
         return
     def straight_horizontal_one_tile(self):

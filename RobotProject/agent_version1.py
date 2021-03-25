@@ -51,7 +51,7 @@ def go(light1,flip1):
     if flip1:
         count += 1
 
-        if vert:# check if we are going vericaly as count will need to be increamented by a larger amountssssss
+        if vert: # check if we are going vertically as count will need to be increamented by a larger amountssssss
             count += 14
         drive.off()
         #time.sleep(2)
@@ -59,8 +59,21 @@ def go(light1,flip1):
         #drive.on()
 
     if count == 56:
-        quit()#exit once at square 56
+        drive.off() #Stops at 56
+        bottle_search()
     return not flip1
+
+# method to search for the bottle
+def bottle_search():
+    goal = False
+    while not goal:
+        d1 = us.distance_centimeters
+        ga.left90()
+        drive.on(SpeedPercent(20), SpeedPercent(19.9))#go forward
+        if (light < 15 and flip) or ((light > 45 and not flip)and not vert) or ((light > 20 and not flip)and vert): # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
+            flip = go(light,flip)
+
+
 
 #method too turn off the grey
 def grey_correction (light1,turn_left_on_grey1):
@@ -87,6 +100,7 @@ count = 0
 flip = True
 
 while True:
+    """change gray correction back."""
 
     #update light
     index += 1#
@@ -104,14 +118,14 @@ while True:
             turn_one(light)
 
 
-        elif (light < 15 and flip) or ((light > 45 and not flip)and not vert) or (light > 20 and not flip): # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
+        elif (light < 15 and flip) or ((light > 45 and not flip)and not vert) or ((light > 20 and not flip)and vert): # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
             flip = go(light,flip)
 
         elif light > 20 and light < 35 and not vert : # check if light level is between 20 and 35
             turn_left_on_grey = grey_correction(light,turn_left_on_grey)
         light = 0#reset light
 
-        if count==56:
+
             
 
 
