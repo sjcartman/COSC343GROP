@@ -16,7 +16,6 @@ speaker = Sound()
 #global
 turn_left_on_grey = False
 ga = GoalAgent()
-vert = False
 atTower = False
 distance = []
 move = 0
@@ -28,24 +27,20 @@ flip = True
 
 #the first turn to go towards the bottle
 def turn_one(light1):
-        global vert
-        global count
 
-        print("s " + str(light1) + " " + str(count))#print my info
+    global count
+    print("s " + str(light1) + " " + str(count))#print my info
 
-        drive.off()#stop
-        ga.var_forward(0.45)
-        time.sleep(1)#waits
-
-        ga.right90()# turn 90 degs to the right
-        #count = count + 15
-        vert = True
+    drive.off()#stop
+    ga.var_forward(0.45)
+    time.sleep(1)#waits
+    ga.right90()# turn 90 degs to the right
+    #count = count + 15
 
 
 # go forward, and check for tiles
-def go(light1,flip1):
+def go(light1, flip1):
     global count
-    global vert
     global move
     global atTower
 
@@ -57,7 +52,7 @@ def go(light1,flip1):
     if flip1:
         count += 1
 
-        if vert: # check if we are going vertically as count will need to be increamented by a larger amountssssss
+        if ga.vert: # check if we are going vertically as count will need to be increamented by a larger amountssssss
             count += 14
         drive.off()
         #time.sleep(2)
@@ -89,7 +84,7 @@ def bottle_search():
         d1 = us.distance_centimeters
         ga.left90()
         drive.on(SpeedPercent(20), SpeedPercent(20))#go forward
-        if (light < 15 and flip) or ((light > 45 and not flip)and not vert) or ((light > 20 and not flip)and vert): # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
+        if (light < 15 and flip) or ((light > 45 and not flip)and not ga.vert) or ((light > 20 and not flip)and ga.vert):  # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
             flip = go(light,flip)
 
 
@@ -112,28 +107,24 @@ def grey_correction (light1,turn_left_on_grey1):
 def find_bottle_with_list():
     global check
     global flip
-    global vert
     white_count = 0
 
     drive.off()
     time.sleep(0.5)
     distance.append(us.distance_centimeters)
     ga.left90()
-    vert = not vert
 
     # to make it move forward on the tile?
     while cs.color != 1 and white_count < 2:
         drive.on(SpeedPercent(20), SpeedPercent(20))
     drive.off()
     ga.right90()
-    vert = not vert
 
 def move_to_column(list):
     approx_max_speed = 1500
     ind = list.index(min(list)) + 1
     dist = min(list)
     bl = 0
-    global vert
 
     if ind == 3:
         drive.on_for_seconds(SpeedPercent(20), SpeedPercent(20), (approx_max_speed*0.2)/dist)
@@ -144,7 +135,6 @@ def move_to_column(list):
             bl+=1
         else:
             ga.left90()
-            vert = not vert
             drive.on_for_seconds(SpeedPercent(20), SpeedPercent(20), (approx_max_speed*0.2)/dist)
             quit()
 
@@ -172,11 +162,11 @@ while True:
             break
         drive.on(SpeedPercent(20), SpeedPercent(19.9))#go forward
 
-        if count == 11 and not vert:# check if we have moved 11 squares forward
+        if count == 11 and not ga.vert:# check if we have moved 11 squares forward
             turn_one(light)
 
 
-        elif (light < 15 and flip) or ((light > 45 and not flip)and not vert) or ((light > 20 and not flip)and vert): # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
+        elif (light < 15 and flip) or ((light > 45 and not flip)and not ga.vert) or ((light > 20 and not flip)and ga.vert): # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
             flip = go(light,flip)
 
 ga.move('rotations', 10, 10, 1.5)

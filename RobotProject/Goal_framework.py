@@ -7,6 +7,7 @@ mLeft = LargeMotor(OUTPUT_B)
 mRight = LargeMotor(OUTPUT_C)
 drive = MoveTank(OUTPUT_B, OUTPUT_C)
 
+vert = True
 
 
 class GoalAgent:
@@ -71,6 +72,8 @@ class GoalAgent:
 
 
     def right90(self):
+        global vert
+        vert = not vert
         drive.on_for_rotations(13, -13, 0.95/2)
         return
 
@@ -78,6 +81,8 @@ class GoalAgent:
         drive.on_for_rotations(-10,-10,rots)
 
     def left90(self):
+        global vert
+        vert = not vert
         drive.on_for_rotations(-13, 13, 0.95 / 2)
         return
 
