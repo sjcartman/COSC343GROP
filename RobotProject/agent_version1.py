@@ -17,7 +17,11 @@ ts = TouchSensor()
 turn_left_on_grey = False
 ga = GoalAgent()
 vert = False
+atTower = False
 distance = []
+move = 0
+check = 0
+flip = True
 #ga.move('spin', 10, 10, 1)
 
 
@@ -42,8 +46,9 @@ def turn_one(light1):
 def go(light1,flip1):
     global count
     global vert
-    atTower = False
-    move = 0
+    global move
+    global atTower
+
     print("e " + str(light1) + " "+str(count))
     # drive.off()ssss
     # time.sleep(.5)sss
@@ -61,15 +66,19 @@ def go(light1,flip1):
 
     if count == 56:
         atTower = True
-        #quit()#exit once at square 56
 
-    # quit()#exit once at square 56
     if atTower:
-        if move < 2:
+        #quit()#exit once at square 56
+        # quit()#exit once at square 56
+        if move < 3:
             find_bottle_with_list()
             move += 1
         else:
             move_to_column(distance)
+
+
+        drive.off() #Stops at 56
+        #bottle_search()
 
     return not flip1
 
@@ -79,7 +88,7 @@ def bottle_search():
     while not goal:
         d1 = us.distance_centimeters
         ga.left90()
-        drive.on(SpeedPercent(20), SpeedPercent(19.9))#go forward
+        drive.on(SpeedPercent(20), SpeedPercent(20))#go forward
         if (light < 15 and flip) or ((light > 45 and not flip)and not vert) or ((light > 20 and not flip)and vert): # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
             flip = go(light,flip)
 
@@ -97,10 +106,11 @@ def grey_correction (light1,turn_left_on_grey1):
 
     else:
         ga.left9()
-    return not turn_left_on_grey1 # return which way to turn next time
+    return not turn_left_on_grey1 # return which way to turn next times
+
 
 def find_bottle_with_list():
-    check = 0
+    global check
     global flip
     global vert
     distance.append(us.distance_centimeters)
@@ -118,6 +128,7 @@ def move_to_column(list):
     ind = list.index(min(list)) + 1
     dist = min(list)
     bl = 0
+    global vert
 
     if ind == 3:
         drive.on_for_seconds(SpeedPercent(20), SpeedPercent(20), (approx_max_speed*0.2)/dist)
@@ -128,6 +139,7 @@ def move_to_column(list):
             bl+=1
         else:
             ga.left90()
+            vert = not vert
             drive.on_for_seconds(SpeedPercent(20), SpeedPercent(20), (approx_max_speed*0.2)/dist)
             quit()
 
@@ -139,11 +151,10 @@ ga.right90()
 index = 0 # counter to keep track of the number of times loops runs. Used to get averages of cs.reflected_light_intensity
 light = 0 # a var to store these averages
 count = 0
-flip = True
+global flip
 
 while True:
     """change gray correction back."""
-
     #update light
     index += 1
     light = cs.reflected_light_intensity

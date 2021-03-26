@@ -66,7 +66,7 @@ class GoalAgent:
         return
     def left9(self):
         drive.on_for_rotations(-13, 13, 0.045/1.8)
-        #self.straight_backward(0.525)
+        #self.straight_backward(0.525)ss
         return
 
 
