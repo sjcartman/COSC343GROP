@@ -19,7 +19,7 @@ drive = MoveTank(OUTPUT_B, OUTPUT_C)
 class GoalAgent:
 
     def __init__(self):
-        self.percept_sequence = ['White']  # Using list of squares past as apposed to flip variable. Action methods check last item in the list.s
+        self.percept_sequence = ['White']  # Using list of squares past as apposed to flip variable. Action methods check last item in the list.sss
         self.current_black_square = 0
         self.current_travel_direction = 'Horizontal'
         self.distance_until_goal = []

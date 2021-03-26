@@ -10,7 +10,7 @@ drive = MoveTank(OUTPUT_B, OUTPUT_C)
 
 
 class GoalAgent:
-    """The class for all goal agent methods and attributes."""
+    """The class for all goal agent methods and attribusstes."""
 
     def __init__(self):
         """Initiating method that sets starting position and angle."""

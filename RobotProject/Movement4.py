@@ -13,7 +13,7 @@ ga = GoalAgent()
 
 
 def light_transition_model(num_of_readings, light_level=None):
-    # get average of X number of light intensity readings
+    # get average of X number of light intensity reasdingss
     for _ in range(num_of_readings):
         light_level += cs.reflected_light_intensity
     light_level = light_level / num_of_readings
