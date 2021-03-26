@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="PASSWORD" host="ev3dev.local" id="5dcad4e9-e49f-40e9-97d7-c96d88e62f6c" port="22" customName="EV3" nameFormat="CUSTOM">
+        <option name="customName" value="EV3" />
+      </sshConfig>
+    </configs>
+  </component>
+</project>

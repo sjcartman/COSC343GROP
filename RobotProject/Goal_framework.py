@@ -6,6 +6,7 @@ from ev3dev2.sensor.lego import ColorSensor
 mLeft = LargeMotor(OUTPUT_B)
 mRight = LargeMotor(OUTPUT_C)
 drive = MoveTank(OUTPUT_B, OUTPUT_C)
+cs = ColorSensor()
 
 vert = True
 
@@ -93,6 +94,20 @@ class GoalAgent:
         drive.on_for_rotations(20,19,0.975)
     def var_forward(self, value):
         drive.on_for_rotations(20,20,value)
+
+    """method to keep the robot straigh"""
+    def correction(self, value):
+        drive.on_for_rotations(20, 20, 0.5)
+        drive.on_for_rotations(13, -13, value)
+        while cs.reflected_light_intensity > 15:
+            drive.on(-13, 13)
+        drive.off()
+        drive.on_for_rotations(-13, 13, 2* value)
+        while cs.reflected_light_intensity > 15:
+            drive.on(13, -13)
+        drive.off()
+        drive.on_for_rotations(13, -13, value)
+
 
 
 

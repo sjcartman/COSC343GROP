@@ -157,7 +157,7 @@ while True:
     if index % 10 == 0:#every 10 times do this block
         light = light / 10# divide light by 10 to get the current average
 
-        if ts.is_pressed:#not my code needs to be commeted :)
+        if ts.is_pressed: #stop if the touch sensor is pressed
             drive.off()
             break
         drive.on(SpeedPercent(20), SpeedPercent(19.9))#go forward
