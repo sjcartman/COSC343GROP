@@ -1,23 +1,27 @@
 #!/usr/bin/env python3
 from ev3dev2.motor import LargeMotor, OUTPUT_B, OUTPUT_C, SpeedPercent, MoveTank
 from ev3dev2.sound import Sound
-from ev3dev2.sensor.lego import ColorSensor
+from ev3dev2.sensor.lego import ColorSensor, UltrasonicSensor, TouchSensor
 from Goal_framework import GoalAgent
-<<<<<<< HEAD
 import time
-import numpy as np
-=======
->>>>>>> 92297f575d90c7d71f5b6f45298bb00631e10f20
 
 
 mLeft = LargeMotor(OUTPUT_B)
 mRight = LargeMotor(OUTPUT_C)
 drive = MoveTank(OUTPUT_B, OUTPUT_C)
+us = UltrasonicSensor()
+ts = TouchSensor()
+cs = ColorSensor()
+speaker = Sound()
 #global
 turn_left_on_grey = False
 ga = GoalAgent()
 vert = False
+atTower = False
 distance = []
+move = 0
+check = 0
+flip = True
 #ga.move('spin', 10, 10, 1)
 
 
@@ -42,6 +46,9 @@ def turn_one(light1):
 def go(light1,flip1):
     global count
     global vert
+    global move
+    global atTower
+
     print("e " + str(light1) + " "+str(count))
     # drive.off()ssss
     # time.sleep(.5)sss
@@ -58,19 +65,21 @@ def go(light1,flip1):
         #drive.on()
 
     if count == 56:
-<<<<<<< HEAD
+        atTower = True
+
+    if atTower:
         #quit()#exit once at square 56
-        move = 0
         # quit()#exit once at square 56
         if move < 3:
             find_bottle_with_list()
+            move += 1
         else:
             move_to_column(distance)
 
-=======
+
         drive.off() #Stops at 56
-        bottle_search()
->>>>>>> 92297f575d90c7d71f5b6f45298bb00631e10f20
+        #bottle_search()
+
     return not flip1
 
 # method to search for the bottle
@@ -79,7 +88,7 @@ def bottle_search():
     while not goal:
         d1 = us.distance_centimeters
         ga.left90()
-        drive.on(SpeedPercent(20), SpeedPercent(19.9))#go forward
+        drive.on(SpeedPercent(20), SpeedPercent(20))#go forward
         if (light < 15 and flip) or ((light > 45 and not flip)and not vert) or ((light > 20 and not flip)and vert): # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
             flip = go(light,flip)
 
@@ -97,25 +106,34 @@ def grey_correction (light1,turn_left_on_grey1):
 
     else:
         ga.left9()
-    return not turn_left_on_grey1 # return which way to turn next time
+    return not turn_left_on_grey1 # return which way to turn next times
 
-<<<<<<< HEAD
+
 def find_bottle_with_list():
-    check = 0
+    global check
     global flip
+    global vert
+    white_count = 0
+
+    drive.off()
+    time.sleep(0.5)
     distance.append(us.distance_centimeters)
     ga.left90()
-    if check<2 and flip:
-        check += 1
-    else:
-        ga.right90()
-        drive.off()
+    vert = not vert
+
+    # to make it move forward on the tile?
+    while cs.color != 1 and white_count < 2:
+        drive.on(SpeedPercent(20), SpeedPercent(20))
+    drive.off()
+    ga.right90()
+    vert = not vert
 
 def move_to_column(list):
     approx_max_speed = 1500
-    ind = np.argmin(list) + 1
+    ind = list.index(min(list)) + 1
     dist = min(list)
     bl = 0
+    global vert
 
     if ind == 3:
         drive.on_for_seconds(SpeedPercent(20), SpeedPercent(20), (approx_max_speed*0.2)/dist)
@@ -126,11 +144,10 @@ def move_to_column(list):
             bl+=1
         else:
             ga.left90()
+            vert = not vert
             drive.on_for_seconds(SpeedPercent(20), SpeedPercent(20), (approx_max_speed*0.2)/dist)
             quit()
 
-=======
->>>>>>> 92297f575d90c7d71f5b6f45298bb00631e10f20
 #move onto black from startsss
 ga.var_forward(0.85)
 ga.right90()
@@ -139,11 +156,10 @@ ga.right90()
 index = 0 # counter to keep track of the number of times loops runs. Used to get averages of cs.reflected_light_intensity
 light = 0 # a var to store these averages
 count = 0
-flip = True
+global flip
 
 while True:
     """change gray correction back."""
-
     #update light
     index += 1#
     light += cs.reflected_light_intensity
