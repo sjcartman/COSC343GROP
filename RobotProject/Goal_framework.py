@@ -10,14 +10,19 @@ drive = MoveTank(OUTPUT_B, OUTPUT_C)
 cs = ColorSensor()
 
 
+
+
 class GoalAgent:
-    """The class for all goal agent methods and attribusstes."""
+    """The class for all goal agent methods and attributes."""
 
     def __init__(self):
         """Initiating method that sets starting position and angle."""
         self.xy = [0, 100]
         self.angle = 90
         self.current_square = None
+        self.vert = True
+        self.corval = 0
+        self.corval2 = 0
 
     def transition_model(self, speed1, speed2, rotation):
         """Transition model method that updates state values based on actions performed."""
@@ -45,10 +50,9 @@ class GoalAgent:
     """def rules(self):
         #Rules method that decides actions based on current world state
         if self.xy = [0, 0]:
-            action = #move to red zoned
-            action = #move to red zoned
+            action = #move to red zone
         else if self.xy = #in red zone:
-            action = #search for towerss
+            action = #search for tower
     #
     def action(self, action_step):
         action_list.append(action_step)"""
@@ -73,6 +77,7 @@ class GoalAgent:
 
 
     def right90(self):
+        self.vert = not self.vert
         drive.on_for_rotations(13, -13, 0.95/2)
         return
 
@@ -80,6 +85,7 @@ class GoalAgent:
         drive.on_for_rotations(-10,-10,rots)
 
     def left90(self):
+        self.vert = not self.vert
         drive.on_for_rotations(-13, 13, 0.95 / 2)
         return
 
@@ -90,54 +96,56 @@ class GoalAgent:
         drive.on_for_rotations(20,19,0.975)
     def var_forward(self, value):
         drive.on_for_rotations(20,20,value)
-    def Straighen(self):
-        import time
-        #check the time too find the line on one side
-        time1_start = time.time()
-        time1_end = time.time()
 
-        #checkss
-        time2_start = time.time()
-        time2_end = time.time()
+    """method to keep the robot straighss ssssssssssssssssssssssssssssssssss"""
+    def correction(self, value, count):
+        speed = 13
+        if count != 1 :
+            drive.on_for_rotations(20, 20, 0.1)
+            time.sleep(0.1)
+            drive.on_for_degrees(speed, -speed, value)
+            time.sleep(0.1)
+            while cs.reflected_light_intensity > 15:
+                drive.on(-speed, speed)
+            drive.off()
+            time.sleep(0.1)
+            drive.on_for_degrees(-speed, speed, 2 * value)
+            time.sleep(0.1)
+            while cs.reflected_light_intensity > 15:
+                drive.on(speed, -speed)
+            drive.off()
+            time.sleep(0.1)
+            drive.on_for_degrees(speed, -speed, value)
+            time.sleep(0.1)
 
-        drive.on(10, -10)
-        flopper = False
-
-        while(True):
-
-            if cs.reflected_light_intensity > 20 and cs.reflected_light_intensity < 40 and not flopper:
-                import time
-                time1_end = time.time()
+    def correction_sam(self):
+        self.corval = 0
+        self.corval2 = 0
+        start_time = time.time()
+        while True:
+            mRight.on(SpeedPercent(20))
+            if cs.color != 1:
+                end_time = time.time()
+                self.corval = end_time-start_time
                 drive.off()
-                time.sleep(1)
-                flopper = True
-                drive.on(-10,10)
-                time.sleep(0.1)
-                time2_start = time.time()
-            elif cs.reflected_light_intensity > 20 and cs.reflected_light_intensity < 40 and flopper:
-                drive.off()
-                time2_end = time1_end
-                time.sleep(0.1)
-
-        drive.on(10, -10)
-        time1 = time1_end - time1_start
-        time2 = time2_end - time1_start
-
-        time = time2 + (time1 * 2)
-        time = time/4
-        time3_start = time.time()
-
-        while(True):
-            time3_end = time.time() - time3_start
-            if(time3_end >= time):
-                drive.off
                 break
-
-
-
-
-
-
-
-
-
+        mRight.on_for_seconds(SpeedPercent(-20), self.corval)
+        start_time = time.time()
+        while True:
+            mLeft.on(SpeedPercent(20))
+            if cs.color != 1:
+                end_time = time.time()
+                self.corval2 = end_time - start_time
+                drive.off()
+                break
+        mLeft.on_for_seconds(SpeedPercent(-20), self.corval)
+        # rotate back based on value2
+        if self.corval2 > self.corval:
+            drive.on_for_degrees(SpeedPercent(-20), SpeedPercent(20), 25)
+        # turn right? or left, forgot what the speed % was
+        elif self.corval == self.corval2:
+            return
+        # elif value2 == value: go straight
+        else:
+            drive.on_for_degrees(SpeedPercent(20), SpeedPercent(-20), 25)
+        # else turn left? or right

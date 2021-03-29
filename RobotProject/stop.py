@@ -4,7 +4,7 @@ from ev3dev2.sound import Sound
 from ev3dev2.sensor.lego import ColorSensor, UltrasonicSensor, TouchSensor
 from Goal_framework import GoalAgent
 import time
-#q
+#qs
 drive = MoveTank(OUTPUT_B,OUTPUT_C)
 drive.off()
 quit()
