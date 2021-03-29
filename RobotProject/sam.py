@@ -51,7 +51,7 @@ def go(light1, flip1):
     if flip1:
         count += 1
 
-        if ga.vert:  # check if we are going vertically as count will need to be increamented by a larger amountssssss
+        if ga.vert:  # check if we are going vertically as count will need to be increamented by a larger amountssssssssssssssssssssssssss
             count += 14
         drive.off()
         ga.correction_sam()
@@ -71,7 +71,7 @@ def go(light1, flip1):
         else:
             move_to_column(distance)
 
-        drive.off()  # Stops at 56s
+        drive.off()  # Stops at 56
         # bottle_search()
 
     return not flip1
@@ -140,7 +140,7 @@ def move_to_column(list):
             quit()
 
 
-# move onto black from startssss
+# move onto black from startssssss
 ga.var_forward(0.85)
 ga.right90()
 
@@ -171,8 +171,3 @@ while True:
         flip = go(light, flip)
 
 ga.move('rotations', 10, 10, 1.5)
-
-
-
-
-
