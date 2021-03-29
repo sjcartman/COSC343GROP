@@ -2,11 +2,12 @@
 from ev3dev2.motor import LargeMotor, OUTPUT_B, OUTPUT_C, SpeedPercent, MoveTank
 from ev3dev2.sound import Sound
 from ev3dev2.sensor.lego import ColorSensor
+import time
 
 mLeft = LargeMotor(OUTPUT_B)
 mRight = LargeMotor(OUTPUT_C)
 drive = MoveTank(OUTPUT_B, OUTPUT_C)
-
+cs = ColorSensor()
 
 
 class GoalAgent:
@@ -44,9 +45,10 @@ class GoalAgent:
     """def rules(self):
         #Rules method that decides actions based on current world state
         if self.xy = [0, 0]:
-            action = #move to red zone
+            action = #move to red zoned
+            action = #move to red zoned
         else if self.xy = #in red zone:
-            action = #search for tower
+            action = #search for towerss
     #
     def action(self, action_step):
         action_list.append(action_step)"""
@@ -88,6 +90,53 @@ class GoalAgent:
         drive.on_for_rotations(20,19,0.975)
     def var_forward(self, value):
         drive.on_for_rotations(20,20,value)
+    def Straighen(self):
+        import time
+        #check the time too find the line on one side
+        time1_start = time.time()
+        time1_end = time.time()
+
+        #checkss
+        time2_start = time.time()
+        time2_end = time.time()
+
+        drive.on(10, -10)
+        flopper = False
+
+        while(True):
+
+            if cs.reflected_light_intensity > 20 and cs.reflected_light_intensity < 40 and not flopper:
+                import time
+                time1_end = time.time()
+                drive.off()
+                time.sleep(1)
+                flopper = True
+                drive.on(-10,10)
+                time.sleep(0.1)
+                time2_start = time.time()
+            elif cs.reflected_light_intensity > 20 and cs.reflected_light_intensity < 40 and flopper:
+                drive.off()
+                time2_end = time1_end
+                time.sleep(0.1)
+
+        drive.on(10, -10)
+        time1 = time1_end - time1_start
+        time2 = time2_end - time1_start
+
+        time = time2 + (time1 * 2)
+        time = time/4
+        time3_start = time.time()
+
+        while(True):
+            time3_end = time.time() - time3_start
+            if(time3_end >= time):
+                drive.off
+                break
+
+
+
+
+
 
 
 

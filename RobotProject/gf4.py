@@ -2,7 +2,7 @@
 from ev3dev2.motor import LargeMotor, OUTPUT_B, OUTPUT_C, SpeedPercent, MoveTank
 from ev3dev2.sound import Sound
 from ev3dev2.sensor.lego import ColorSensor, TouchSensor, UltrasonicSensor
-import Movements4 as m
+import Movement4 as m
 import time
 
 # s
@@ -16,10 +16,10 @@ us.mode = 'US-DIST-CM'
 drive = MoveTank(OUTPUT_B, OUTPUT_C)
 
 
-class GoalAgent:
+class GoalAgent1:
 
     def __init__(self):
-        self.percept_sequence = ['White']  # Using list of squares past as apposed to flip variable. Action methods check last item in the list.sss
+        self.percept_sequence = ['White']  # Using list of squares past as apposed to flip variables0. Action methods check last item in the list.ssss
         self.current_black_square = 0
         self.current_travel_direction = 'Horizontal'
         self.distance_until_goal = []

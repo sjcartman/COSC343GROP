@@ -2,13 +2,13 @@
 from ev3dev2.motor import LargeMotor, OUTPUT_B, OUTPUT_C, SpeedPercent, MoveTank
 from ev3dev2.sound import Sound
 from ev3dev2.sensor.lego import ColorSensor, TouchSensor, UltrasonicSensor
-from gf4 import GoalAgent
+from gf4 import GoalAgent1
 import Movements4 as m
 import time
 
 # robot module initiationsssssss
 drive = MoveTank(OUTPUT_B, OUTPUT_C)
-ga = GoalAgent()
+ga = GoalAgent1()
 
 # move to first black tile
 drive.on_for_rotations(20, 20, 0.85)
@@ -19,5 +19,5 @@ while not ga.goal_found:
     drive.on(SpeedPercent(20), SpeedPercent(20))
     ga.model_based_reflex_agent(light_input)
 
-# todo: set up correction feedback from timing distance until each black, and correcting if distance becomes over.
+# todo: set up correction feedback from timing distance until each black, and correcting if distance becomes over.s
 # todo: get find_bottle method working with moving forwards and backwards, and returning bottle location when found.s

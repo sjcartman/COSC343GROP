@@ -143,7 +143,7 @@ def move_to_column(list):
             drive.on_for_seconds(SpeedPercent(20), SpeedPercent(20), (approx_max_speed*0.2)/dist)
             quit()
 
-#move onto black from startsss
+#move onto black from startssss
 ga.var_forward(0.85)
 ga.right90()
 
@@ -172,6 +172,7 @@ while True:
 
 
     elif (light < 15 and flip) or ((light > 45 and not flip)and not vert) or ((light > 20 and not flip)and vert): # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
+        ga.Straighen()
         flip = go(light,flip)
 
 ga.move('rotations', 10, 10, 1.5)
