@@ -2,6 +2,7 @@
 from ev3dev2.motor import LargeMotor, OUTPUT_B, OUTPUT_C, SpeedPercent, MoveTank
 from ev3dev2.sound import Sound
 from ev3dev2.sensor.lego import ColorSensor, UltrasonicSensor
+import math
 # import Movements4 as m
 import time
 
@@ -11,7 +12,6 @@ mLeft = LargeMotor(OUTPUT_B)
 mRight = LargeMotor(OUTPUT_C)
 cs = ColorSensor()
 us = UltrasonicSensor()
-us.mode = 'US_SI_CM'
 drive = MoveTank(OUTPUT_B, OUTPUT_C)
 
 
@@ -19,47 +19,43 @@ class GoalAgent1:
 
     def __init__(self):
         self.percept_sequence = [
-            'Black']  # Using list of squares past as apposed to flip variable. Action methods check last item in the list.
-        self.current_black_square = 1
+            'White']  # Using list of squares past as apposed to flip variable. Action methods check last item in the lists.
+        self.current_black_square = 0
         self.current_travel_direction = 'Horizontal'
         self.distance_until_goal = []
         self.goal_found = False
 
     def model_based_reflex_agent(self, light_percept):
         """Decides current action. Sends signal to horizontal or vertical action methods depending on direction of travel."""
-        print('in reflex decision')
         if self.current_travel_direction == 'Horizontal':
-            print('about to do horizontal')
             self.horizontal_action(light_percept)
         elif self.current_travel_direction == 'Vertical':
             self.vertical_action(light_percept)
         else:
-            print(f"Current travel direction error: {self.current_travel_direction} is not an approved value.")
+            pass
 
     def horizontal_action(self, light_percept):
         """Initiates horizontal actions once certain conditions are met. Updates percept_sequence, and current_black_square depending on action taken."""
         # Using percept_sequence, and qualified light_percept for immediate human-readable clarity.
         if self.percept_sequence[-1] == 'White' and light_percept == 'Black':
-            print('if statement is good')
             self.current_black_square = self.current_black_square + 1
-            print('current black square update is good')
             drive.off()
-            print('drive off is good')
             time.sleep(1)
             print('sleep is good')
             # speaker.speak(str(self.current_black_square))
             print('speaker is good')
             self.percept_sequence.append('Black')
-            print(f"Action #1. Last percept sequence = {self.percept_sequence}, light_percept = {light_percept}")
+            #print(f"Action #1. Last percept sequence = {self.percept_sequence}, light_percept = {light_percept}")
             print('calibrating')
             self.calibrate()
 
         elif self.percept_sequence[-1] == 'Black' and light_percept == 'White':
             self.percept_sequence.append('White')
-            print(f"Action #2. percept sequence = {self.percept_sequence}, light_percept = {light_percept}")
+            #print(f"Action #2. percept sequence = {self.percept_sequence}, light_percept = {light_percept}")
 
         else:
-            print(f"No action. Last percept sequence = {self.percept_sequence}, light_percept = {light_percept}")
+            pass
+            # print(f"No action. Last percept sequence = {self.percept_sequence}, light_percept = {light_percept}")
 
         if self.current_black_square == 11:
             self.rotate_90_degrees()
@@ -114,7 +110,41 @@ class GoalAgent1:
         # reset
         drive.on_for_rotations(-13, 8, 0.01*counter2)
 
+        # A calibration strategy that might work for physical robot
+        """  # test which side is closer
+        drive.off
+
+        # Working values at -8, 13, 0.01, and the inverses
+
+        # check left lean
+        counter = 0
+        while cs.reflected_light_intensity < 25:
+            drive.on_for_rotations(-8, 13, 0.01)
+            counter = counter + 1
+
+        # reset
+        self.calibrate_data.append(counter)
+        print(self.calibrate_data[-1])
+        print(f"Rotating {counter + 10*(math.log(30/counter))}")
+        drive.on_for_rotations(8, -13, 0.01*counter + 0.1*(math.log(30/counter)))
+
+        # check right lean
+        counter2 = 0
+        while cs.reflected_light_intensity < 25:
+            drive.on_for_rotations(13, -8, 0.01)
+            counter2 = counter2 + 1
+
+        # reset
+        self.calibrate_data.append(counter2)
+        print(self.calibrate_data[-1])
+        print(f"Rotating {counter2 + 10 * (math.log(30 / counter2))}")
+        drive.on_for_rotations(-13, 8, 0.01*counter2 + 0.1*(math.log(30/counter2)))
+
         print(f"Counter 1: {counter}, Counter 2: {counter2}")
+        print(f"Average rotation count =  {sum(self.calibrate_data)/len(self.calibrate_data)}")
+        print(self.calibrate_data)
+
+        """
 
 
 
@@ -133,9 +163,9 @@ class GoalAgent1:
         light_level = light_level / num_of_readings
         print(light_level)
         # light levels, <15, >45, >20
-        if light_level < 26:
+        if light_level < 15:
             return 'Black'
-        elif light_level >= 26:
+        elif light_level >= 45 :
             return 'White'
         elif light_level > 100:
             return 'Gray'
@@ -154,4 +184,4 @@ class GoalAgent1:
         drive.on_for_rotations(-13, 13, 0.95 / 2)
 
     def right90(self):
-        drive.on_for_rotations(13, -13, 1.05 / 2)
+        drive.on_for_rotations(13, -13, 0.95/2)
