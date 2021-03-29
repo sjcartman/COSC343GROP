@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from ev3dev2.motor import LargeMotor, OUTPUT_B, OUTPUT_C, SpeedPercent, MoveTank
 from ev3dev2.sound import Sound
-from ev3dev2.sensor.lego import ColorSensor, UltrasonicSensor, TouchSensor
+from ev3dev2.sensor.lego import ColorSensor, UltrasonicSensor,TouchSensor
 from Goal_framework import GoalAgent
 import time
 
@@ -10,9 +10,9 @@ mLeft = LargeMotor(OUTPUT_B)
 mRight = LargeMotor(OUTPUT_C)
 drive = MoveTank(OUTPUT_B, OUTPUT_C)
 us = UltrasonicSensor()
-ts = TouchSensor()
 cs = ColorSensor()
 speaker = Sound()
+ts = TouchSensor()
 #global
 turn_left_on_grey = False
 ga = GoalAgent()
@@ -48,13 +48,14 @@ def go(light1, flip1):
     # drive.off()ssss
     # time.sleep(.5)sss
 
-    # if we have changed from white to black increase and say count
+    # if we have changed from white to black increase and say countsssss
     if flip1:
         count += 1
 
-        if ga.vert: # check if we are going vertically as count will need to be increamented by a larger amountssssss
+        if ga.vert: # check if we are going vertically as count will need to be increamented by a larger amountssssssssssssssssssssssssss
             count += 14
         drive.off()
+        ga.correction(120,count)
         #time.sleep(2)
         speaker.speak(str(count))
         #drive.on()
@@ -96,7 +97,7 @@ def grey_correction (light1,turn_left_on_grey1):
     drive.off()
     time.sleep(.5)
 
-    if turn_left_on_grey1:#check which way we turned last time and turn the other way
+    if turn_left_on_grey1:#check which way we turned last time and turn the other wayss
         ga.right9()
 
     else:
@@ -138,36 +139,34 @@ def move_to_column(list):
             drive.on_for_seconds(SpeedPercent(20), SpeedPercent(20), (approx_max_speed*0.2)/dist)
             quit()
 
-#move onto black from startsss
+#move onto black from startssssss
 ga.var_forward(0.85)
 ga.right90()
 
 #main loop
-index = 0 # counter to keep track of the number of times loops runs. Used to get averages of cs.reflected_light_intensity
+index = 0 # counter to keep track of the number of times loops runs. Used to get  averages of cs.reflected_light_intensity
 light = 0 # a var to store these averages
 count = 0
 global flip
 
 while True:
-    """change gray correction back."""
+    """change gray correction back.s"""
     #update light
-    index += 1#
-    light += cs.reflected_light_intensity
+    index += 1
+    light = cs.reflected_light_intensity
+    #if index % 10 == 0:#every 10 times do this block
+    #light = light / 10# divide light by 10 to get the current average
+    if ts.is_pressed: #stop if the touch sensor is pressed
+        drive.off()
+        break
+    drive.on(SpeedPercent(20), SpeedPercent(19.9))#go forward
 
-    if index % 10 == 0:#every 10 times do this block
-        light = light / 10# divide light by 10 to get the current average
-
-        if ts.is_pressed: #stop if the touch sensor is pressed
-            drive.off()
-            break
-        drive.on(SpeedPercent(20), SpeedPercent(19.9))#go forward
-
-        if count == 11 and not ga.vert:# check if we have moved 11 squares forward
-            turn_one(light)
+    if count == 11 and not ga.vert:# check if we have moved 11 squares forward
+        turn_one(light)
 
 
-        elif (light < 15 and flip) or ((light > 45 and not flip)and not ga.vert) or ((light > 20 and not flip)and ga.vert): # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
-            flip = go(light,flip)
+    elif (light < 15 and flip) or ((light > 45 and not flip)and not ga.vert) or ((light > 20 and not flip)and ga.vert): # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
+        flip = go(light,flip)
 
 ga.move('rotations', 10, 10, 1.5)
 

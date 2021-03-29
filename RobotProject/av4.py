@@ -7,7 +7,7 @@ from gf4 import GoalAgent
 
 # robot module initiationss
 drive = MoveTank(OUTPUT_B, OUTPUT_C)
-ga = GoalAgent()
+ga = GoalAgent1()
 
 # move to first black tile - used values 20, 20, 0.85
 drive.on_for_rotations(20, 20, 0.85)

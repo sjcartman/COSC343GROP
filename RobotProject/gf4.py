@@ -15,7 +15,7 @@ us = UltrasonicSensor()
 drive = MoveTank(OUTPUT_B, OUTPUT_C)
 
 
-class GoalAgent:
+class GoalAgent1:
 
     def __init__(self):
         self.percept_sequence = [
