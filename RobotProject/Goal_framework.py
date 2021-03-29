@@ -95,7 +95,7 @@ class GoalAgent:
     def var_forward(self, value):
         drive.on_for_rotations(20,20,value)
 
-    """method to keep the robot straighss ssssssssssssssssssssssss
+    """method to keep the robot straighsssssssssssss
     ss"""
     def correction(self, value, count):
         speed = 13

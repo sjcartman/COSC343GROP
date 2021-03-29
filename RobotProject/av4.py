@@ -5,7 +5,7 @@ from ev3dev2.sensor.lego import ColorSensor, TouchSensor, UltrasonicSensor
 # import Movements4 as m
 from gf4 import GoalAgent
 
-# robot module initiationss
+# robot module initsiationss
 drive = MoveTank(OUTPUT_B, OUTPUT_C)
 ga = GoalAgent1()
 
