@@ -19,8 +19,8 @@ class GoalAgent1:
 
     def __init__(self):
         self.percept_sequence = [
-            'Black']  # Using list of squares past as apposed to flip variable. Action methods check last item in the lists.
-        self.current_black_square = 1
+            'White']  # Using list of squares past as apposed to flip variable. Action methods check last item in the lists.
+        self.current_black_square = 0
         self.current_travel_direction = 'Horizontal'
         self.distance_until_goal = []
         self.goal_found = False
@@ -40,11 +40,11 @@ class GoalAgent1:
         if self.percept_sequence[-1] == 'White' and light_percept == 'Black':
             self.current_black_square = self.current_black_square + 1
             drive.off()
-            time.sleep(1)
             speaker.speak(str(self.current_black_square))
             self.percept_sequence.append('Black')
             #print(f"Action #1. Last percept sequence = {self.percept_sequence}, light_percept = {light_percept}")
-            self.calibrate()
+            if self.current_black_square > 1:
+                self.calibrate()
 
         elif self.percept_sequence[-1] == 'Black' and light_percept == 'White':
             self.percept_sequence.append('White')
@@ -85,13 +85,12 @@ class GoalAgent1:
             self.find_bottle_with_list()
 
     def calibrate(self):
-        """Note: this seems to correct the robot in the simulator, but I have no idea why - Taya."""
         # test which side is closer
         drive.off
 
         # check left lean
         counter = 0
-        while cs.reflected_light_intensity < 25:
+        while cs.reflected_light_intensity < 20:
             drive.on_for_rotations(-13, 13, 0.1)
             counter = counter + 1
 
@@ -100,7 +99,7 @@ class GoalAgent1:
 
         # check right lean
         counter2 = 0
-        while cs.reflected_light_intensity < 25:
+        while cs.reflected_light_intensity < 20:
             drive.on_for_rotations(13, -13, 0.0)
             counter2 = counter2 + 1
 
