@@ -2,12 +2,14 @@
 from ev3dev2.motor import LargeMotor, OUTPUT_B, OUTPUT_C, SpeedPercent, MoveTank
 from ev3dev2.sound import Sound
 from ev3dev2.sensor.lego import ColorSensor
+import time
 
 mLeft = LargeMotor(OUTPUT_B)
 mRight = LargeMotor(OUTPUT_C)
 drive = MoveTank(OUTPUT_B, OUTPUT_C)
+cs = ColorSensor()
 
-vert = True
+
 
 class GoalAgent:
     """The class for all goal agent methods and attributes."""
@@ -20,6 +22,7 @@ class GoalAgent:
         self.xy = [0, 100]
         self.angle = 90
         self.current_square = None
+        self.vert = True
 
     def transition_model(self, speed1, speed2, rotation):
         """Transition model method that updates state values based on actions performed."""
@@ -74,8 +77,7 @@ class GoalAgent:
 
 
     def right90(self):
-        global vert
-        vert = not vert
+        self.vert = not self.vert
         drive.on_for_rotations(13, -13, 0.95/2)
         return
 
@@ -83,8 +85,7 @@ class GoalAgent:
         drive.on_for_rotations(-10,-10,rots)
 
     def left90(self):
-        global vert
-        vert = not vert
+        self.vert = not self.vert
         drive.on_for_rotations(-13, 13, 0.95 / 2)
         return
 
@@ -96,6 +97,55 @@ class GoalAgent:
     def var_forward(self, value):
         drive.on_for_rotations(20,20,value)
 
+    """method to keep the robot straighss ssssssssssssssssssssssssssssssssss"""
+    def correction(self, value, count):
+        speed = 13
+        if count != 1 :
+            drive.on_for_rotations(20, 20, 0.1)
+            time.sleep(0.1)
+            drive.on_for_degrees(speed, -speed, value)
+            time.sleep(0.1)
+            while cs.reflected_light_intensity > 15:
+                drive.on(-speed, speed)
+            drive.off()
+            time.sleep(0.1)
+            drive.on_for_degrees(-speed, speed, 2 * value)
+            time.sleep(0.1)
+            while cs.reflected_light_intensity > 15:
+                drive.on(speed, -speed)
+            drive.off()
+            time.sleep(0.1)
+            drive.on_for_degrees(speed, -speed, value)
+            time.sleep(0.1)
 
-
-
+    def correction_sam(self):
+        value = 0
+        value2 = 0
+        start_time = time.time()
+        while True:
+            mRight.on(SpeedPercent(20))
+            if cs.color != 1:
+                end_time = time.time()
+                value = end_time - start_time
+                drive.off()
+                break
+        mRight.on_for_seconds(SpeedPercent(-20), value)
+        start_time = time.time()
+        while True:
+            mLeft.on(SpeedPercent(20))
+            if cs.color != 1:
+                end_time = time.time()
+                value2 = end_time - start_time
+                drive.off()
+                break
+        mLeft.on_for_seconds(SpeedPercent(-20), value2)
+        # rotate back based on value2
+        if value2 > value:
+            drive.on_for_degrees(SpeedPercent(20), SpeedPercent(-20), 25)
+        # turn right? or left, forgot what the speed % was
+        elif value == value2:
+            return
+        # elif value2 == value: go straight
+        else:
+            drive.on_for_degrees(SpeedPercent(-20), SpeedPercent(20), 25)
+        # else turn left? or right

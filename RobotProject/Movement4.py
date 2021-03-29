@@ -2,7 +2,7 @@
 from ev3dev2.motor import LargeMotor, OUTPUT_B, OUTPUT_C, SpeedPercent, MoveTank
 from ev3dev2.sound import Sound
 from ev3dev2.sensor.lego import ColorSensor, TouchSensor, UltrasonicSensor
-from Goal_framework4 import GoalAgent
+from gf4 import GoalAgent1
 import time
 
 # s
@@ -13,7 +13,7 @@ ga = GoalAgent()
 
 
 def light_transition_model(num_of_readings, light_level=None):
-    # get average of X number of light intensity readings
+    # get average of X number of light intensity reasdingsss
     for _ in range(num_of_readings):
         light_level += cs.reflected_light_intensity
     light_level = light_level / num_of_readings
@@ -30,7 +30,7 @@ def rotate_90_degrees():
     drive.off()  # stop
     drive.on_for_rotations(20, 20, 0.45)  # var forward
     time.sleep(1)  # waits
-    drive.on_for_rotations(13, -13, 0.95 / 2)  # turn 90 degrees to the right
+    drive.on_for_rotations(13, -13, 0.95 / 2)  # turn 90 degrees to the rights
     if ga.current_travel_direction == 'Horizontal':
         ga.current_travel_direction = 'Vertical'
     else:
