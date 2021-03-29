@@ -2,6 +2,7 @@
 from ev3dev2.motor import LargeMotor, OUTPUT_B, OUTPUT_C, SpeedPercent, MoveTank
 from ev3dev2.sound import Sound
 from ev3dev2.sensor.lego import ColorSensor, UltrasonicSensor
+import math
 # import Movements4 as m
 import time
 
@@ -115,6 +116,41 @@ class GoalAgent:
         drive.on_for_rotations(-13, 8, 0.01*counter2)
 
         print(f"Counter 1: {counter}, Counter 2: {counter2}")
+        # A calibration strategy that might work for physical robot
+        """  # test which side is closer
+        drive.off
+
+        # Working values at -8, 13, 0.01, and the inverse
+
+        # check left lean
+        counter = 0
+        while cs.reflected_light_intensity < 25:
+            drive.on_for_rotations(-8, 13, 0.01)
+            counter = counter + 1
+
+        # reset
+        self.calibrate_data.append(counter)
+        print(self.calibrate_data[-1])
+        print(f"Rotating {counter + 10*(math.log(30/counter))}")
+        drive.on_for_rotations(8, -13, 0.01*counter + 0.1*(math.log(30/counter)))
+
+        # check right lean
+        counter2 = 0
+        while cs.reflected_light_intensity < 25:
+            drive.on_for_rotations(13, -8, 0.01)
+            counter2 = counter2 + 1
+
+        # reset
+        self.calibrate_data.append(counter2)
+        print(self.calibrate_data[-1])
+        print(f"Rotating {counter2 + 10 * (math.log(30 / counter2))}")
+        drive.on_for_rotations(-13, 8, 0.01*counter2 + 0.1*(math.log(30/counter2)))
+
+        print(f"Counter 1: {counter}, Counter 2: {counter2}")
+        print(f"Average rotation count =  {sum(self.calibrate_data)/len(self.calibrate_data)}")
+        print(self.calibrate_data)
+
+        """
 
 
 
