@@ -97,21 +97,22 @@ class GoalAgent:
     def var_forward(self, value):
         drive.on_for_rotations(20,20,value)
 
-    """method to keep the robot straighss ssssssssssssssssssssssssssssssssss"""
+    """method to keep the robot straighss ssssssssssssssssssssssss
+    ss"""
     def correction(self, value, count):
         speed = 13
         if count != 1 :
-            drive.on_for_rotations(20, 20, 0.1)
+            #drive.on_for_rotations(20, 20, 0.3)
             time.sleep(0.1)
             drive.on_for_degrees(speed, -speed, value)
             time.sleep(0.1)
-            while cs.reflected_light_intensity > 15:
+            while cs.reflected_light_intensity > 10:
                 drive.on(-speed, speed)
             drive.off()
             time.sleep(0.1)
             drive.on_for_degrees(-speed, speed, 2 * value)
             time.sleep(0.1)
-            while cs.reflected_light_intensity > 15:
+            while cs.reflected_light_intensity > 10:
                 drive.on(speed, -speed)
             drive.off()
             time.sleep(0.1)
