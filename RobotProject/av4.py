@@ -4,15 +4,15 @@ from ev3dev2.sound import Sound
 from ev3dev2.sensor.lego import ColorSensor, TouchSensor, UltrasonicSensor
 # import Movements4 as m
 from gf4 import GoalAgent
-import time
 
-# robot module initiations
+# robot module initiationss
 drive = MoveTank(OUTPUT_B, OUTPUT_C)
 ga = GoalAgent1()
 
 # move to first black tile - used values 20, 20, 0.85
 drive.on_for_rotations(20, 20, 0.85)
 ga.right90()
+drive.on_for_rotations(20, 20, 0.5)
 
 
 while not ga.goal_found:
