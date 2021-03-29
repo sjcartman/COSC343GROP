@@ -17,10 +17,11 @@ speaker = Sound()
 turn_left_on_grey = False
 ga = GoalAgent()
 atTower = False
-distance = []
+#distance = []
 move = 0
 check = 0
 flip = True
+distance = 0
 #ga.move('spin', 10, 10, 1)
 
 
@@ -52,39 +53,45 @@ def go(light1, flip1):
     if flip1:
         count += 1
 
-        if ga.vert: # check if we are going vertically as count will need to be increamented by a larger amountssssss
+        if ga.vert(): # check if we are going vertically as count will need to be increamented by a larger amountssssss
             count += 14
         drive.off()
         #time.sleep(2)
         speaker.speak(str(count))
         #drive.on()
 
-    if count == 56:
-        atTower = True
+    if count == 55 or count==70 or count==85 or count==100:
+        drive.off()
+        drive.on_for_seconds(SpeedPercent(20), SpeedPercent(20), 0.5)
+        drive.off()
+        ga.left90()
+        time.sleep(2)
+        move_to_tower()
+        ga.right90()
 
-    if atTower:
+    """if atTower:
         #quit()#exit once at square 56
         # quit()#exit once at square 56
         if move < 3:
             find_bottle_with_list()
             move += 1
         else:
-            move_to_column(distance)
+            move_to_column(distance)"""
 
 
-        drive.off() #Stops at 56
+     #Stops at 56
         #bottle_search()
 
     return not flip1
 
 # method to search for the bottle
-def bottle_search():
+def bottle_search(light):
     goal = False
     while not goal:
         d1 = us.distance_centimeters
         ga.left90()
         drive.on(SpeedPercent(20), SpeedPercent(20))#go forward
-        if (light < 15 and flip) or ((light > 45 and not flip)and not ga.vert) or ((light > 20 and not flip)and ga.vert):  # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
+        if (light < 15 and flip) or ((light > 45 and not flip)and not ga.vert()) or ((light > 20 and not flip)and ga.vert()):  # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
             flip = go(light,flip)
 
 
@@ -105,7 +112,7 @@ def grey_correction (light1,turn_left_on_grey1):
 
 
 def find_bottle_with_list():
-    global check
+    """global check
     global flip
     white_count = 0
 
@@ -118,10 +125,10 @@ def find_bottle_with_list():
     while cs.color != 1 and white_count < 2:
         drive.on(SpeedPercent(20), SpeedPercent(20))
     drive.off()
-    ga.right90()
+    ga.right90("""
 
-def move_to_column(list):
-    approx_max_speed = 1500
+def move_to_tower():
+    """approx_max_speed = 1500
     ind = list.index(min(list)) + 1
     dist = min(list)
     bl = 0
@@ -136,7 +143,19 @@ def move_to_column(list):
         else:
             ga.left90()
             drive.on_for_seconds(SpeedPercent(20), SpeedPercent(20), (approx_max_speed*0.2)/dist)
-            quit()
+            quit()"""
+    global distance
+    dist = 0
+    dist += us.distance_centimeters
+    if distance ==0:
+        distance = dist
+    elif dist<distance:
+        distance = dist
+
+
+    return distance
+
+
 
 #move onto black from startsss
 ga.var_forward(0.85)
@@ -146,7 +165,6 @@ ga.right90()
 index = 0 # counter to keep track of the number of times loops runs. Used to get averages of cs.reflected_light_intensity
 light = 0 # a var to store these averages
 count = 0
-global flip
 
 while True:
     """change gray correction back."""
@@ -162,11 +180,11 @@ while True:
             break
         drive.on(SpeedPercent(20), SpeedPercent(19.9))#go forward
 
-        if count == 11 and not ga.vert:# check if we have moved 11 squares forward
+        if count == 10 and not ga.vert():# check if we have moved 11 squares forward
             turn_one(light)
 
 
-        elif (light < 15 and flip) or ((light > 45 and not flip)and not ga.vert) or ((light > 20 and not flip)and ga.vert): # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
+        elif (light < 15 and flip) or ((light > 45 and not flip)and not ga.vert()) or ((light > 20 and not flip)and ga.vert()): # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
             flip = go(light,flip)
 
 ga.move('rotations', 10, 10, 1.5)
