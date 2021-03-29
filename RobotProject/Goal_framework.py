@@ -21,8 +21,6 @@ class GoalAgent:
         self.angle = 90
         self.current_square = None
         self.vert = True
-        self.corval = 0
-        self.corval2 = 0
 
     def transition_model(self, speed1, speed2, rotation):
         """Transition model method that updates state values based on actions performed."""
@@ -119,33 +117,33 @@ class GoalAgent:
             time.sleep(0.1)
 
     def correction_sam(self):
-        self.corval = 0
-        self.corval2 = 0
+        value = 0
+        value2 = 0
         start_time = time.time()
         while True:
             mRight.on(SpeedPercent(20))
             if cs.color != 1:
                 end_time = time.time()
-                self.corval = end_time-start_time
+                value = end_time - start_time
                 drive.off()
                 break
-        mRight.on_for_seconds(SpeedPercent(-20), self.corval)
+        mRight.on_for_seconds(SpeedPercent(-20), value)
         start_time = time.time()
         while True:
             mLeft.on(SpeedPercent(20))
             if cs.color != 1:
                 end_time = time.time()
-                self.corval2 = end_time - start_time
+                value2 = end_time - start_time
                 drive.off()
                 break
-        mLeft.on_for_seconds(SpeedPercent(-20), self.corval)
+        mLeft.on_for_seconds(SpeedPercent(-20), value2)
         # rotate back based on value2
-        if self.corval2 > self.corval:
-            drive.on_for_degrees(SpeedPercent(-20), SpeedPercent(20), 25)
+        if value2 > value:
+            drive.on_for_degrees(SpeedPercent(20), SpeedPercent(-20), 25)
         # turn right? or left, forgot what the speed % was
-        elif self.corval == self.corval2:
+        elif value == value2:
             return
         # elif value2 == value: go straight
         else:
-            drive.on_for_degrees(SpeedPercent(20), SpeedPercent(-20), 25)
+            drive.on_for_degrees(SpeedPercent(-20), SpeedPercent(20), 25)
         # else turn left? or right
