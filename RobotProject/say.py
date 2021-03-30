@@ -44,7 +44,7 @@ def go(light1, flip1):
 
     print("e " + str(light1) + " " + str(count))
     # drive.off()ssss
-    # time.sleep(.5)sss
+    # time.sleep(.5)ssaf
 
     # if we have changed from white to black increase and say countsssss
     if flip1:
@@ -53,27 +53,61 @@ def go(light1, flip1):
         if ga.vert:  # check if we are going vertically as count will need to be increamented by a larger amountssssssssssssssssssssssssss
             count += 14
         drive.off()
-        ga.correction(120, count)
-        # time.sleep(2)
+        #ga.correction(120, count)
+        # time.sleep(2)s
         speaker.speak(str(count))
         # drive.on()ss
 
     if count == 55 or count==70 or count==85 or count==100:
         tile = 0
-        i = 1
-        drive.on_for_seconds(SpeedPercent(20), SpeedPercent(20), 0.5)
-        ga.left90
-        drive.off
-        tile += (find_bottle()*i)
+        drive.on_for_seconds(SpeedPercent(20), SpeedPercent(20), 2)
+        drive.off()
+        ga.left90()
+        drive.off()
+        time.sleep(1)
+        tile += find_bottle()
         if tile == 0:
             speaker.speak("nothing here")
         else:
-            speaker.speak(str(tile))
-    i += 1
+            if count == 55:
+                speaker.speak(str(tile))
+                quit()
+            elif count == 70:
+                if tile == 1:
+                    speaker.speak(str(4))
+                    quit()
+                elif tile == 2:
+                    speaker.speak(str(5))
+                    quit()
+                elif tile == 3:
+                    speaker.speak(str(6))
+                    quit()
+            elif count == 85:
+                if tile == 1:
+                    speaker.speak(str(7))
+                    quit()
+                elif tile == 2:
+                    speaker.speak(str(8))
+                    quit()
+                elif tile == 3:
+                    speaker.speak(str(9))
+                    quit()
+            elif count == 100:
+                if tile == 1:
+                    speaker.speak(str(10))
+                    quit()
+                elif tile == 2:
+                    speaker.speak(str(11))
+                    quit()
+                elif tile == 3:
+                    speaker.speak(str(12))
+                    quit()
+
+        ga.right90()
     return not flip1
 
 
-# method to search for the bottle
+# method to search for the bottlesa
 def bottle_search():
     goal = False
     while not goal:
@@ -159,8 +193,7 @@ while True:
         turn_one(light)
 
 
-    elif (light < 15 and flip) or ((light > 45 and not flip) and not ga.vert) or ((
-                                                                                          light > 20 and not flip) and ga.vert):  # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
+    elif (light < 15 and flip) or ((light > 45 and not flip) and not ga.vert) or ((light > 20 and not flip) and ga.vert):  # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
         flip = go(light, flip)
 
 ga.move('rotations', 10, 10, 1.5)
