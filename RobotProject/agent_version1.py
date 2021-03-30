@@ -115,7 +115,7 @@ def find_bottle_with_list():
     distance.append(us.distance_centimeters)
     ga.left90()
 
-    # to make it move forward on thes tile?
+    # to make it move forward on thes tile?ss
     while cs.color != 1 and white_count < 2:
         drive.on(SpeedPercent(20), SpeedPercent(20))
     drive.off()

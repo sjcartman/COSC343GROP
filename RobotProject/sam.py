@@ -63,7 +63,7 @@ def go(light1, flip1):
         atTower = True
 
     if atTower:
-        # quit()#exit once at square 56
+        # quit()#exit once at square 56s
         # quit()#exit once at square 56
         if move < 3:
             find_bottle_with_list()
@@ -72,7 +72,7 @@ def go(light1, flip1):
             move_to_column(distance)
 
         drive.off()  # Stops at 56
-        # bottle_search()
+        # bottle_search()s
 
     return not flip1
 
