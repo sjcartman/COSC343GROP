@@ -16,7 +16,6 @@ ts = TouchSensor()
 turn_left_on_grey = False
 ga = GoalAgent()
 atTower = False
-distance = []
 move = 0
 check = 0
 flip = True
@@ -34,6 +33,7 @@ def turn_one(light1):
     ga.var_forward(0.45)
     time.sleep(1)  # waits
     ga.right90()  # turn 90 degs to the right
+    # count = count + 15
 
 
 # go forward, and check for tiles
@@ -44,7 +44,7 @@ def go(light1, flip1):
 
     print("e " + str(light1) + " " + str(count))
     # drive.off()ssss
-    # time.sleep(.5)sss
+    # time.sleep(.5)ssaf
 
     # if we have changed from white to black increase and say countsssss
     if flip1:
@@ -53,30 +53,61 @@ def go(light1, flip1):
         if ga.vert:  # check if we are going vertically as count will need to be increamented by a larger amountssssssssssssssssssssssssss
             count += 14
         drive.off()
-        ga.correction_sam()
-        # time.sleep(2)
+        #ga.correction(120, count)
+        # time.sleep(2)s
         speaker.speak(str(count))
-        # drive.on()
+        # drive.on()ss
 
-    if count == 56:
-        atTower = True
-
-    if atTower:
-        # quit()#exit once at square 56s
-        # quit()#exit once at square 56
-        if move < 3:
-            find_bottle_with_list()
-            move += 1
+    if count == 55 or count==70 or count==85 or count==100:
+        tile = 0
+        drive.on_for_seconds(SpeedPercent(20), SpeedPercent(20), 2)
+        drive.off()
+        ga.left90()
+        drive.off()
+        time.sleep(1)
+        tile += find_bottle()
+        if tile == 0:
+            speaker.speak("nothing here")
         else:
-            move_to_column(distance)
+            if count == 55:
+                speaker.speak(str(tile))
+                quit()
+            elif count == 70:
+                if tile == 1:
+                    speaker.speak(str(4))
+                    quit()
+                elif tile == 2:
+                    speaker.speak(str(5))
+                    quit()
+                elif tile == 3:
+                    speaker.speak(str(6))
+                    quit()
+            elif count == 85:
+                if tile == 1:
+                    speaker.speak(str(7))
+                    quit()
+                elif tile == 2:
+                    speaker.speak(str(8))
+                    quit()
+                elif tile == 3:
+                    speaker.speak(str(9))
+                    quit()
+            elif count == 100:
+                if tile == 1:
+                    speaker.speak(str(10))
+                    quit()
+                elif tile == 2:
+                    speaker.speak(str(11))
+                    quit()
+                elif tile == 3:
+                    speaker.speak(str(12))
+                    quit()
 
-        drive.off()  # Stops at 56
-        # bottle_search()s
-
+        ga.right90()
     return not flip1
 
 
-# method to search for the bottle
+# method to search for the bottlesa
 def bottle_search():
     goal = False
     while not goal:
@@ -103,25 +134,22 @@ def grey_correction(light1, turn_left_on_grey1):
     return not turn_left_on_grey1  # return which way to turn next times
 
 
-def find_bottle_with_list():
-    global check
-    global flip
-    white_count = 0
+def find_bottle():
+    result = 0
+    distance = us.distance_centimeters
+    if distance <= 32:
+        result += 1
+    elif distance>32 and distance <=64:
+        result += 2
+    elif distance>64 and distance <=100:
+        result += 3
+    else:
+        result = 0
 
-    drive.off()
-    time.sleep(0.5)
-    distance.append(us.distance_centimeters)
-    ga.left90()
-
-    # to make it move forward on the tile?
-    while cs.color != 1 and white_count < 2:
-        drive.on(SpeedPercent(20), SpeedPercent(20))
-    drive.off()
-    ga.right90()
-
+    return result
 
 def move_to_column(list):
-    approx_max_speed = 1500
+    """approx_max_speed = 1500
     ind = list.index(min(list)) + 1
     dist = min(list)
     bl = 0
@@ -136,7 +164,7 @@ def move_to_column(list):
         else:
             ga.left90()
             drive.on_for_seconds(SpeedPercent(20), SpeedPercent(20), (approx_max_speed * 0.2) / dist)
-            quit()
+            quit()"""
 
 
 # move onto black from startssssss
@@ -161,12 +189,16 @@ while True:
         break
     drive.on(SpeedPercent(20), SpeedPercent(19.9))  # go forward
 
-    if count == 11 and not ga.vert:  # check if we have moved 11 squares forward
+    if count == 10 and not ga.vert:  # check if we have moved 11 squares forward
         turn_one(light)
 
 
-    elif (light < 15 and flip) or ((light > 45 and not flip) and not ga.vert) or ((
-                                                                                          light > 20 and not flip) and ga.vert):  # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
+    elif (light < 15 and flip) or ((light > 45 and not flip) and not ga.vert) or ((light > 20 and not flip) and ga.vert):  # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
         flip = go(light, flip)
 
 ga.move('rotations', 10, 10, 1.5)
+
+
+
+
+
