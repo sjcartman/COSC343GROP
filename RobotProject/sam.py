@@ -43,7 +43,7 @@ def go(light1, flip1):
     global atTower
 
     print("e " + str(light1) + " " + str(count))
-    # drive.off()ssss
+    # drive.off()sssss
     # time.sleep(.5)sss
 
     # if we have changed from white to black increase and say countsssss

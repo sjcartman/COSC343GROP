@@ -58,65 +58,65 @@ def go(light1, flip1):
         drive.off()
         ga.correction_sam(count)
         #ga.correction(120, count)
-        # time.sleep(2)sssssssssss
+        # time.sleep(2)ssssssssssssss
         speaker.speak(str(count))
         # drive.on()ss
 
-    if count == 55 or count==70 or count==85 or count==100:
-        tile = 0
-        found = False
-        drive.on_for_seconds(SpeedPercent(20), SpeedPercent(20), 2)
-        drive.off()
-        ga.left90()
-        drive.off()
-        time.sleep(1)
-        tile += find_bottle()
-        if tile == 0:
-            speaker.speak("nothing here")
-        else:
-            a = True
-            if count == 55:
-                speaker.speak("tower at {}", str(tile))
-                found = True
-            elif count == 70:
-                if tile == 1:
-                    speaker.speak("tower at {}", str(4))
+        if count == 55 or count == 70 or count == 85 or count == 100:
+            tile = 0
+            found = False
+            drive.on_for_seconds(SpeedPercent(20), SpeedPercent(20), 2)# change 2 to 1?
+            drive.off()
+            ga.left90()
+            drive.off()
+            time.sleep(1)
+            tile += find_bottle()
+            if tile == 0:
+                speaker.speak("nothing here")
+            else:
+                a = True
+                if count == 55:
+                    speaker.speak("tower at {}", str(tile))
                     found = True
-                elif tile == 2:
-                    speaker.speak("tower at {}", str(5))
-                    found = True
-                elif tile == 3:
-                    speaker.speak(str(6))
-                    found = True
-            elif count == 85:
-                if tile == 1:
-                    speaker.speak(str(7))
-                    found = True
-                elif tile == 2:
-                    speaker.speak(str(8))
-                    found = True
-                elif tile == 3:
-                    speaker.speak(str(9))
-                    found = True
-            elif count == 100:
-                if tile == 1:
-                    speaker.speak(str(10))
-                    print(10)
-                    found = True
-                elif tile == 2:
-                    speaker.speak(str(11))
-                    print(11)
-                    found = True
-                elif tile == 3:
-                    speaker.speak(str(12))
-                    print(12)
-                    found = True
+                elif count == 70:
+                    if tile == 1:
+                        speaker.speak("tower at {}", str(4))
+                        found = True
+                    elif tile == 2:
+                        speaker.speak("tower at {}", str(5))
+                        found = True
+                    elif tile == 3:
+                        speaker.speak(str(6))
+                        found = True
+                elif count == 85:
+                    if tile == 1:
+                        speaker.speak(str(7))
+                        found = True
+                    elif tile == 2:
+                        speaker.speak(str(8))
+                        found = True
+                    elif tile == 3:
+                        speaker.speak(str(9))
+                        found = True
+                elif count == 100:
+                    if tile == 1:
+                        speaker.speak(str(10))
+                        print(10)
+                        found = True
+                    elif tile == 2:
+                        speaker.speak(str(11))
+                        print(11)
+                        found = True
+                    elif tile == 3:
+                        speaker.speak(str(12))
+                        print(12)
+                        found = True
 
-        if found:
-            time.sleep(5)
-            quit()
-        else:
-            ga.right90()
+            if found:
+                time.sleep(5)
+                quit()
+            else:
+                ga.right90()
 
     return not flip1
 

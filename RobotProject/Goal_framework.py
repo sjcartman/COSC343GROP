@@ -121,10 +121,12 @@ class GoalAgent:
             time.sleep(0.1)
 
     def correction_sam(self, count):
-        if count <= 1:
+        if count <= 1 or count == 10:
             return
-        # move forward to be more on the tile
-        self.var_forward(0.1)
+        # move forward to be more on the tile only if not going vert
+
+        if count <= 54:
+            self.var_forward(0.1)
         # start the timer
         start_time = time.time()
         while True:
@@ -153,27 +155,42 @@ class GoalAgent:
                 break
         mLeft.on_for_seconds(SpeedPercent(-20), value2)
         # round the values off to get an estimate(to 1 decimal place? not sure if it works)
-        value2 = float("{:.1f}".format(value2))
-        value = float("{:.1f}".format(value))
-        # if one is higher, turn one way by 25 degrees, else turn other, else if same go straight
+        value2 = float("{:.2f}".format(value2))
+        value = float("{:.2f}".format(value))
         f = open("stuff.txt", "a")
-        valuesum = value2+value
-        f.write("value2: " + str(value2) + " value:" + str(value) + "\nSum Value:" + str(valuesum) + "\n")
+        valuedif = abs(value - value2)
+        f.write("Count : "
+                + str(count)
+                + "\t"
+                + "value2: "
+                + str(value2)
+                + "\t"
+                + " value:"
+                + str(value)
+                + "\tSum Diff:"
+                + str(valuedif)
+                + "\t")
         f.close()
-        # use offset value to change rotations based on value?
+        # use offset value to change rotations based on value?s
         # value , value2 = offset, to be used on degrees turned?
-        #
-        #5 + (20 * valuedesc)
-        valuedif = abs(value-value2)
-        # margin of error allowed
-        if valuedif < 0.2:
+
+        # margin of error allowed, smaller margin of error means turns less, bigger means turns mores
+
+        if valuedif <= 0.1:
             return
+        # if margin of error is large, change the fluctval to 20, if medium, 15, if small 10s
+        if valuedif >= 0.6 and count < 10:  # large
+            fluctval = 20
+        elif valuedif >= 0.3 and count < 10:  # medium
+            fluctval = 15
+        elif valuedif >= 0.2:  # small
+            fluctval = 7.5
+        else :
+            fluctval = 5
         if value2 > value:
-            # fixed 20 degree rotation
-            valuedesc = value2/valuesum
-            drive.on_for_degrees(SpeedPercent(20), SpeedPercent(-20), 20)
+            # fixed 20 degree rotations
+            drive.on_for_degrees(SpeedPercent(20), SpeedPercent(-20), fluctval)
         elif value == value2:
             return
         else:
-            valuedesc = value/valuesum
-            drive.on_for_degrees(SpeedPercent(-20), SpeedPercent(20), 20)
+            drive.on_for_degrees(SpeedPercent(-20), SpeedPercent(20), fluctval)
