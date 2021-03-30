@@ -119,6 +119,9 @@ class GoalAgent:
     def correction_sam(self):
         value = 0
         value2 = 0
+        # added move forward code
+        self.var_forward(0.35)
+        drive.on
         start_time = time.time()
         while True:
             mRight.on(SpeedPercent(20))
@@ -137,7 +140,9 @@ class GoalAgent:
                 drive.off()
                 break
         mLeft.on_for_seconds(SpeedPercent(-20), value2)
-        # rotate back based on value2
+        # rounding it off to 2 dp for estimate
+        value2 = round(value2, 1)
+        value = round(value, 1)
         if value2 > value:
             drive.on_for_degrees(SpeedPercent(20), SpeedPercent(-20), 25)
         # turn right? or left, forgot what the speed % was

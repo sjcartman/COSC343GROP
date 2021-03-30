@@ -34,7 +34,6 @@ def turn_one(light1):
     ga.var_forward(0.45)
     time.sleep(1)  # waits
     ga.right90()  # turn 90 degs to the right
-    # count = count + 15
 
 
 # go forward, and check for tiles
