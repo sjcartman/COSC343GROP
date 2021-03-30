@@ -45,17 +45,17 @@ def go(light1, flip1):
     global atTower
 
     print("e " + str(light1) + " "+str(count))
-    # drive.off()ssss
-    # time.sleep(.5)sss
+    # drive.off()ss
+    # time.sleep(.5)
 
     # if we have changed from white to black increase and say countsssss
     if flip1:
         count += 1
 
-        if ga.vert: # check if we are going vertically as count will need to be increamented by a larger amountssssssssssssssssssssssssss
+        if ga.vert: # check if we are going vertically as count will need to be increamented by a larger amountssssss
             count += 14
         drive.off()
-        ga.correction(120,count)
+        ga.correction(40,count)
         #time.sleep(2)
         speaker.speak(str(count))
         #drive.on()
@@ -115,7 +115,7 @@ def find_bottle_with_list():
     distance.append(us.distance_centimeters)
     ga.left90()
 
-    # to make it move forward on the tile?
+    # to make it move forward on thes tile?
     while cs.color != 1 and white_count < 2:
         drive.on(SpeedPercent(20), SpeedPercent(20))
     drive.off()

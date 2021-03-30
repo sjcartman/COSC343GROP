@@ -6,7 +6,7 @@ import math
 # import Movements4 as m
 import time
 
-# s
+# ss
 speaker = Sound()
 mLeft = LargeMotor(OUTPUT_B)
 mRight = LargeMotor(OUTPUT_C)
@@ -41,11 +41,11 @@ class GoalAgent1:
         if self.percept_sequence[-1] == 'White' and light_percept == 'Black':
             self.current_black_square = self.current_black_square + 1
             drive.off()
+            time.sleep(1)
             speaker.speak(str(self.current_black_square))
             self.percept_sequence.append('Black')
             #print(f"Action #1. Last percept sequence = {self.percept_sequence}, light_percept = {light_percept}")
-            if self.current_black_square > 1:
-                self.calibrate()
+            self.calibrate()
 
         elif self.percept_sequence[-1] == 'Black' and light_percept == 'White':
             self.percept_sequence.append('White')

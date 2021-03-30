@@ -3,6 +3,7 @@ from ev3dev2.motor import LargeMotor, OUTPUT_B, OUTPUT_C, SpeedPercent, MoveTank
 from ev3dev2.sound import Sound
 from ev3dev2.sensor.lego import ColorSensor
 import time
+import sys
 
 mLeft = LargeMotor(OUTPUT_B)
 mRight = LargeMotor(OUTPUT_C)
@@ -10,8 +11,12 @@ drive = MoveTank(OUTPUT_B, OUTPUT_C)
 cs = ColorSensor()
 
 
+
 class GoalAgent:
     """The class for all goal agent methods and attributes."""
+    def vert(self):
+        global vert
+        return vert
 
     def __init__(self):
         """Initiating method that sets starting position and angle."""
@@ -66,10 +71,11 @@ class GoalAgent:
         drive.on_for_rotations(13, -13, 0.045/2)
         #self.straight_backward(0.525)
         return
-
     def left9(self):
         drive.on_for_rotations(-13, 13, 0.045/1.8)
+        #self.straight_backward(0.525)ss
         return
+
 
     def right90(self):
         self.vert = not self.vert
@@ -92,53 +98,82 @@ class GoalAgent:
     def var_forward(self, value):
         drive.on_for_rotations(20,20,value)
 
-    """method to keep the robot straighss ssssssssssssssssssssssssssssssssss"""
+    """method to keep the robot straighssssssssssssss
+    ss"""
     def correction(self, value, count):
         speed = 13
         if count != 1 :
-            drive.on_for_rotations(20, 20, 0.1)
+            #drive.on_for_rotations(20, 20, 0.3)
             time.sleep(0.1)
             drive.on_for_degrees(speed, -speed, value)
             time.sleep(0.1)
-            while cs.reflected_light_intensity > 15:
+            while cs.reflected_light_intensity > 10:
                 drive.on(-speed, speed)
             drive.off()
             time.sleep(0.1)
             drive.on_for_degrees(-speed, speed, 2 * value)
             time.sleep(0.1)
-            while cs.reflected_light_intensity > 15:
+            while cs.reflected_light_intensity > 10:
                 drive.on(speed, -speed)
             drive.off()
             time.sleep(0.1)
             drive.on_for_degrees(speed, -speed, value)
             time.sleep(0.1)
 
-    def correction_sam(self):
+    def correction_sam(self, count):
+        if count <= 1:
+            return
+        # move forward to be more on the tile
+        self.var_forward(0.1)
+        # start the timer
         start_time = time.time()
         while True:
+            # move left(because right wheel is turned on)s
             mRight.on(SpeedPercent(20))
-            if cs.color != 1:
+            # if light reflected is not black
+            if cs.reflected_light_intensity > 30:
+                # record the time
                 end_time = time.time()
+                # save it into a value
                 value = end_time - start_time
+                # stop the motors
                 drive.off()
+                # break out of the surrounding while loop
                 break
+        # return back to normal position
         mRight.on_for_seconds(SpeedPercent(-20), value)
+        # repeat the above for the right(left wheel now turned on)
         start_time = time.time()
         while True:
             mLeft.on(SpeedPercent(20))
-            if cs.reflected_light_intensity > 15:
+            if cs.reflected_light_intensity > 30:
                 end_time = time.time()
                 value2 = end_time - start_time
                 drive.off()
                 break
         mLeft.on_for_seconds(SpeedPercent(-20), value2)
-        # rotate back based on value2
+        # round the values off to get an estimate(to 1 decimal place? not sure if it works)
+        value2 = float("{:.1f}".format(value2))
+        value = float("{:.1f}".format(value))
+        # if one is higher, turn one way by 25 degrees, else turn other, else if same go straight
+        f = open("stuff.txt", "a")
+        valuesum = value2+value
+        f.write("value2: " + str(value2) + " value:" + str(value) + "\nSum Value:" + str(valuesum) + "\n")
+        f.close()
+        # use offset value to change rotations based on value?
+        # value , value2 = offset, to be used on degrees turned?
+        #
+        #5 + (20 * valuedesc)
+        valuedif = abs(value-value2)
+        # margin of error allowed
+        if valuedif < 0.2:
+            return
         if value2 > value:
-            drive.on_for_degrees(SpeedPercent(20), SpeedPercent(-20), 25)
-        # turn right? or left, forgot what the speed % was
+            # fixed 20 degree rotation
+            valuedesc = value2/valuesum
+            drive.on_for_degrees(SpeedPercent(20), SpeedPercent(-20), 20)
         elif value == value2:
             return
-        # elif value2 == value: go straight
         else:
-            drive.on_for_degrees(SpeedPercent(-20), SpeedPercent(20), 25)
-        # else turn left? or right
+            valuedesc = value/valuesum
+            drive.on_for_degrees(SpeedPercent(-20), SpeedPercent(20), 20)
