@@ -11,9 +11,11 @@ cs = ColorSensor()
 
 
 
-
 class GoalAgent:
     """The class for all goal agent methods and attributes."""
+    def vert(self):
+        global vert
+        return vert
 
     def __init__(self):
         """Initiating method that sets starting position and angle."""

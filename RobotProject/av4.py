@@ -3,10 +3,9 @@ from ev3dev2.motor import LargeMotor, OUTPUT_B, OUTPUT_C, SpeedPercent, MoveTank
 from ev3dev2.sound import Sound
 from ev3dev2.sensor.lego import ColorSensor, TouchSensor, UltrasonicSensor
 # import Movements4 as m
-from gf4 import GoalAgent
-import time
+from gf4 import GoalAgent1
 
-# robot module initiations
+# robot module initiationss
 drive = MoveTank(OUTPUT_B, OUTPUT_C)
 ga = GoalAgent1()
 
