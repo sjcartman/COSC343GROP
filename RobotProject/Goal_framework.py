@@ -10,12 +10,8 @@ drive = MoveTank(OUTPUT_B, OUTPUT_C)
 cs = ColorSensor()
 
 
-
 class GoalAgent:
     """The class for all goal agent methods and attributes."""
-    def vert(self):
-        global vert
-        return vert
 
     def __init__(self):
         """Initiating method that sets starting position and angle."""
@@ -70,11 +66,10 @@ class GoalAgent:
         drive.on_for_rotations(13, -13, 0.045/2)
         #self.straight_backward(0.525)
         return
+
     def left9(self):
         drive.on_for_rotations(-13, 13, 0.045/1.8)
-        #self.straight_backward(0.525)ss
         return
-
 
     def right90(self):
         self.vert = not self.vert
@@ -119,11 +114,6 @@ class GoalAgent:
             time.sleep(0.1)
 
     def correction_sam(self):
-        value = 0
-        value2 = 0
-        # added move forward code
-        self.var_forward(0.35)
-        drive.on
         start_time = time.time()
         while True:
             mRight.on(SpeedPercent(20))
@@ -136,15 +126,13 @@ class GoalAgent:
         start_time = time.time()
         while True:
             mLeft.on(SpeedPercent(20))
-            if cs.color != 1:
+            if cs.reflected_light_intensity > 15:
                 end_time = time.time()
                 value2 = end_time - start_time
                 drive.off()
                 break
         mLeft.on_for_seconds(SpeedPercent(-20), value2)
-        # rounding it off to 2 dp for estimate
-        value2 = round(value2, 1)
-        value = round(value, 1)
+        # rotate back based on value2
         if value2 > value:
             drive.on_for_degrees(SpeedPercent(20), SpeedPercent(-20), 25)
         # turn right? or left, forgot what the speed % was
