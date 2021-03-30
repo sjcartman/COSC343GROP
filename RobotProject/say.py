@@ -56,6 +56,7 @@ def go(light1, flip1):
         if ga.vert:  # check if we are going vertically as count will need to be increamented by a larger amountssssssssssssssssssssssssss
             count += 14
         drive.off()
+        ga.correction_sam(count)
         #ga.correction(120, count)
         # time.sleep(2)sssssssssss
         speaker.speak(str(count))
