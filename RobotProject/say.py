@@ -76,39 +76,39 @@ def go(light1, flip1):
         else:
             a = True
             if count == 55:
-                speaker.speak("tower at {}", str(tile))
+                speaker.speak("tower at tile {}", str(tile))
                 found = True
             elif count == 70:
                 if tile == 1:
-                    speaker.speak("tower at {}", str(4))
+                    speaker.speak("tower at tile {}", str(4))
                     found = True
                 elif tile == 2:
-                    speaker.speak("tower at {}", str(5))
+                    speaker.speak("tower at tile {}", str(5))
                     found = True
                 elif tile == 3:
-                    speaker.speak(str(6))
+                    speaker.speak("tower at tile {}", str(6))
                     found = True
             elif count == 85:
                 if tile == 1:
-                    speaker.speak(str(7))
+                    speaker.speak("tower at tile {}", str(7))
                     found = True
                 elif tile == 2:
-                    speaker.speak(str(8))
+                    speaker.speak("tower at tile {}", str(8))
                     found = True
                 elif tile == 3:
-                    speaker.speak(str(9))
+                    speaker.speak("tower at tile {}", str(9))
                     found = True
             elif count == 100:
                 if tile == 1:
-                    speaker.speak(str(10))
+                    speaker.speak("tower at tile {}", str(10))
                     print(10)
                     found = True
                 elif tile == 2:
-                    speaker.speak(str(11))
+                    speaker.speak("tower at tile {}", str(11))
                     print(11)
                     found = True
                 elif tile == 3:
-                    speaker.speak(str(12))
+                    speaker.speak("tower at tile {}", str(12))
                     print(12)
                     found = True
 
