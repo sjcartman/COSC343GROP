@@ -53,7 +53,7 @@ def go(light1, flip1):
         if ga.vert:  # check if we are going vertically as count will need to be increamented by a larger amountssssssssssssssssssssssssss
             count += 14
         drive.off()
-        ga.correction_sam()
+        ga.correction_sam(count)
         # time.sleep(2)
         speaker.speak(str(count))
         # drive.on()
@@ -62,7 +62,7 @@ def go(light1, flip1):
         atTower = True
 
     if atTower:
-        # quit()#exit once at square 56s
+        # quit()#exit once at square 56ss
         # quit()#exit once at square 56
         if move < 3:
             find_bottle_with_list()

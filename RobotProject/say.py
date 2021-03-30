@@ -43,7 +43,7 @@ def go(light1, flip1):
     global atTower
 
     print("e " + str(light1) + " " + str(count))
-    # drive.off()ssss
+    # drive.off()
     # time.sleep(.5)ssaf
 
     # if we have changed from white to black increase and say countsssss
@@ -69,41 +69,47 @@ def go(light1, flip1):
         if tile == 0:
             speaker.speak("nothing here")
         else:
+            a = True
             if count == 55:
                 speaker.speak(str(tile))
-                quit()
+                print(tile)
             elif count == 70:
                 if tile == 1:
                     speaker.speak(str(4))
-                    quit()
+                    print(4)
                 elif tile == 2:
                     speaker.speak(str(5))
-                    quit()
+                    print(5)
                 elif tile == 3:
                     speaker.speak(str(6))
-                    quit()
+                    print(6)
             elif count == 85:
                 if tile == 1:
                     speaker.speak(str(7))
-                    quit()
+                    print(7)
                 elif tile == 2:
                     speaker.speak(str(8))
-                    quit()
+                    print(8)
                 elif tile == 3:
                     speaker.speak(str(9))
-                    quit()
+                    print(str(9))
             elif count == 100:
                 if tile == 1:
                     speaker.speak(str(10))
-                    quit()
+                    print(10)
                 elif tile == 2:
                     speaker.speak(str(11))
-                    quit()
+                    print(str(11))
                 elif tile == 3:
                     speaker.speak(str(12))
-                    quit()
-
+                    print(str(12))
+            else:
+                a = False
         ga.right90()
+        if a :
+            time.sleep(4)
+            quit()
+
     return not flip1
 
 
@@ -139,10 +145,13 @@ def find_bottle():
     distance = us.distance_centimeters
     if distance <= 32:
         result += 1
+        print(count)
     elif distance>32 and distance <=64:
         result += 2
+        print(count)
     elif distance>64 and distance <=100:
         result += 3
+        print(count)
     else:
         result = 0
 
@@ -163,7 +172,7 @@ def move_to_column(list):
             bl += 1
         else:
             ga.left90()
-            drive.on_for_seconds(SpeedPercent(20), SpeedPercent(20), (approx_max_speed * 0.2) / dist)
+            drive.on_for_seconds(SpeedPercent(20), SpeedPercent(20), (approx_max_speed * 0.2) / dist)s
             quit()"""
 
 
