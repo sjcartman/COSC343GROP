@@ -37,6 +37,9 @@ def turn_one(light1):
 
 
 # go forward, and check for tiles
+# once at tile 55,70,85, and 100 it will move to forward into the grey tile
+# and starts calling the find_bottle method. Stores the returned value from
+# find_bottle method in "tile" variable and use it to check which tile the tower is located.
 def go(light1, flip1):
     global count
     global move
@@ -54,12 +57,13 @@ def go(light1, flip1):
             count += 14
         drive.off()
         #ga.correction(120, count)
-        # time.sleep(2)s
+        # time.sleep(2)sssssssssss
         speaker.speak(str(count))
         # drive.on()ss
 
     if count == 55 or count==70 or count==85 or count==100:
         tile = 0
+        found = False
         drive.on_for_seconds(SpeedPercent(20), SpeedPercent(20), 2)
         drive.off()
         ga.left90()
@@ -71,44 +75,47 @@ def go(light1, flip1):
         else:
             a = True
             if count == 55:
-                speaker.speak(str(tile))
-                print(tile)
+                speaker.speak("tower at {}", str(tile))
+                found = True
             elif count == 70:
                 if tile == 1:
-                    speaker.speak(str(4))
-                    print(4)
+                    speaker.speak("tower at {}", str(4))
+                    found = True
                 elif tile == 2:
-                    speaker.speak(str(5))
-                    print(5)
+                    speaker.speak("tower at {}", str(5))
+                    found = True
                 elif tile == 3:
                     speaker.speak(str(6))
-                    print(6)
+                    found = True
             elif count == 85:
                 if tile == 1:
                     speaker.speak(str(7))
-                    print(7)
+                    found = True
                 elif tile == 2:
                     speaker.speak(str(8))
-                    print(8)
+                    found = True
                 elif tile == 3:
                     speaker.speak(str(9))
-                    print(str(9))
+                    found = True
             elif count == 100:
                 if tile == 1:
                     speaker.speak(str(10))
                     print(10)
+                    found = True
                 elif tile == 2:
                     speaker.speak(str(11))
-                    print(str(11))
+                    print(11)
+                    found = True
                 elif tile == 3:
                     speaker.speak(str(12))
-                    print(str(12))
-            else:
-                a = False
-        ga.right90()
-        if a :
-            time.sleep(4)
+                    print(12)
+                    found = True
+
+        if found:
+            time.sleep(5)
             quit()
+        else:
+            ga.right90()
 
     return not flip1
 
@@ -139,7 +146,10 @@ def grey_correction(light1, turn_left_on_grey1):
         ga.left9()
     return not turn_left_on_grey1  # return which way to turn next times
 
-
+# method that stores the distance read by ultrasonic sensor into a variable "distance"
+# variable "distance" is then compared to the distance of each tile from where the robot is
+# a max of just 3 tiles where each grey tile is roughly 30cm wide.
+# if distance falls between the distance the the location of the tile is stored in result and returned.
 def find_bottle():
     result = 0
     distance = us.distance_centimeters
@@ -176,7 +186,7 @@ def move_to_column(list):
             quit()"""
 
 
-# move onto black from startssssss
+# move onto black from startssssssssss
 ga.var_forward(0.85)
 ga.right90()
 
