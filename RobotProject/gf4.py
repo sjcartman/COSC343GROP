@@ -21,7 +21,8 @@ class GoalAgent1:
         self.percept_sequence = [
             'White']  # Using list of squares past as apposed to flip variable. Action methods check last item in the lists.
         self.current_black_square = 0
-        self.current_travel_direction = 'Horizontal'
+        self.current_travel_direction = 'Vertical'
+        self.calibrate_data = []
         self.distance_until_goal = []
         self.goal_found = False
 
@@ -85,95 +86,65 @@ class GoalAgent1:
             self.find_bottle_with_list()
 
     def calibrate(self):
-        # test which side is closer
+        # test which side is closera
         drive.off
 
-        # check left lean
+        # check left leanssss
         counter = 0
-        while cs.reflected_light_intensity < 20:
+        while cs.reflected_light_intensity < 17:
             drive.on_for_rotations(-13, 13, 0.1)
             counter = counter + 1
 
         # reset
-        drive.on_for_rotations(13, -13, 0.1*counter)
-
-        # check right lean
-        counter2 = 0
-        while cs.reflected_light_intensity < 20:
-            drive.on_for_rotations(13, -13, 0.0)
-            counter2 = counter2 + 1
-
-        # reset
-        drive.on_for_rotations(-13, 13, 0.1*counter2)
-
-        # A calibration strategy that might work for physical robot
-        """  # test which side is closer
-        drive.off
-
-        # Working values at -8, 13, 0.01, and the inverses
-
-        # check left lean
-        counter = 0
-        while cs.reflected_light_intensity < 25:
-            drive.on_for_rotations(-8, 13, 0.01)
-            counter = counter + 1
-
-        # reset
         self.calibrate_data.append(counter)
-        print(self.calibrate_data[-1])
-        print(f"Rotating {counter + 10*(math.log(30/counter))}")
-        drive.on_for_rotations(8, -13, 0.01*counter + 0.1*(math.log(30/counter)))
+        if len(self.calibrate_data) > 4:
+            average = sum(self.calibrate_data)/len(self.calibrate_data)
+            drive.on_for_rotations(13, -13, 0.1 * counter + 0.1*(math.log(average / counter)))
+        else:
+            drive.on_for_rotations(13, -13, 0.1*counter)
+
 
         # check right lean
         counter2 = 0
-        while cs.reflected_light_intensity < 25:
-            drive.on_for_rotations(13, -8, 0.01)
+        while cs.reflected_light_intensity < 17:
+            drive.on_for_rotations(13, -13, 0.1)
             counter2 = counter2 + 1
 
         # reset
         self.calibrate_data.append(counter2)
-        print(self.calibrate_data[-1])
-        print(f"Rotating {counter2 + 10 * (math.log(30 / counter2))}")
-        drive.on_for_rotations(-13, 8, 0.01*counter2 + 0.1*(math.log(30/counter2)))
-
-        print(f"Counter 1: {counter}, Counter 2: {counter2}")
-        print(f"Average rotation count =  {sum(self.calibrate_data)/len(self.calibrate_data)}")
-        print(self.calibrate_data)
-
-        """
-
-
-
-
+        if len(self.calibrate_data) > 4:
+            average = sum(self.calibrate_data)/len(self.calibrate_data)
+            drive.on_for_rotations(13, -13, 0.1 * counter + 0.1*(math.log(average / counter)))
+        else:
+            drive.on_for_rotations(-13, 13, 0.1*counter2)
 
     # Movement actions
     def light_transition_model(self, num_of_readings):
-        # get average of X number of light intensity readings
+        # get average of X number of light intensity readingss
 
         light_level = 0
         for _ in range(num_of_readings):
             light_level = light_level + cs.reflected_light_intensity
         light_level = light_level / num_of_readings
+        print(light_level)
         # light levels, <15, >45, >20
         if light_level < 15:
             return 'Black'
-        elif light_level >= 34:
+        elif light_level >= 30:
             return 'White'
-        elif light_level > 100:
+        elif light_level > 15:
             return 'Gray'
 
-    def rotate_90_degrees(self):
-        drive.off()  # stop
-        drive.on_for_rotations(20, 20, 0.45)  # var forward
-        time.sleep(1)  # waits
-        drive.on_for_rotations(13, -13, 0.95 / 2)  # turn 90 degrees to the right - current values 13, -13, 0.95/2
+    def left90(self):
+        drive.on_for_rotations(-13, 13, 0.95 / 2)
         if self.current_travel_direction == 'Horizontal':
             self.current_travel_direction = 'Vertical'
         else:
             self.current_travel_direction = 'Horizontal'
 
-    def left90(self):
-        drive.on_for_rotations(-13, 13, 0.95 / 2)
-
     def right90(self):
         drive.on_for_rotations(13, -13, 0.95/2)
+        if self.current_travel_direction == 'Horizontal':
+            self.current_travel_direction = 'Vertical'
+        else:
+            self.current_travel_direction = 'Horizontal'
