@@ -21,7 +21,7 @@ class GoalAgent1:
         self.percept_sequence = [
             'White']  # Using list of squares past as apposed to flip variable. Action methods check last item in the lists.
         self.current_black_square = 0
-        self.current_travel_direction = 'Horizontal'
+        self.current_travel_direction = 'Vertical'
         self.calibrate_data = []
         self.distance_until_goal = []
         self.goal_found = False
@@ -89,9 +89,9 @@ class GoalAgent1:
         # test which side is closera
         drive.off
 
-        # check left leanss
+        # check left leanssss
         counter = 0
-        while cs.reflected_light_intensity < 20:
+        while cs.reflected_light_intensity < 17:
             drive.on_for_rotations(-13, 13, 0.1)
             counter = counter + 1
 
@@ -99,15 +99,14 @@ class GoalAgent1:
         self.calibrate_data.append(counter)
         if len(self.calibrate_data) > 4:
             average = sum(self.calibrate_data)/len(self.calibrate_data)
-            drive.on_for_rotations(13, -13, 0.1 * counter + (math.log(average / counter)))
+            drive.on_for_rotations(13, -13, 0.1 * counter + 0.1*(math.log(average / counter)))
         else:
             drive.on_for_rotations(13, -13, 0.1*counter)
 
 
         # check right lean
         counter2 = 0
-        while cs.reflected_light_intensity < 20:
-            print("driving...")
+        while cs.reflected_light_intensity < 17:
             drive.on_for_rotations(13, -13, 0.1)
             counter2 = counter2 + 1
 
@@ -115,7 +114,7 @@ class GoalAgent1:
         self.calibrate_data.append(counter2)
         if len(self.calibrate_data) > 4:
             average = sum(self.calibrate_data)/len(self.calibrate_data)
-            drive.on_for_rotations(13, -13, 0.1 * counter + (math.log(average / counter)))
+            drive.on_for_rotations(13, -13, 0.1 * counter + 0.1*(math.log(average / counter)))
         else:
             drive.on_for_rotations(-13, 13, 0.1*counter2)
 
