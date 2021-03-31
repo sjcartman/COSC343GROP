@@ -53,19 +53,19 @@ def go(light1, flip1):
     if flip1:
         count += 1
 
-        if ga.vert:  # check if we are going vertically as count will need to be increamented by a larger amountssssssssssssssssssssssssss
+        if ga.vert:  # check if we are going vertically as count will need to be increamented by a larger amounts
             count += 14
-            ga.correction_sam_main(0.4)
-            ga.taya_correction(5)
-            drive.on_for_rotations(-20, -20, 1.85)
+            #speaker.speak(str(count))
+            #ga.correction_sam_main(0.4)
+            #ga.taya_correction(5)
+            #drive.on_for_rotations(-20, -20, 1.7)
         drive.off()
-        if not ga.vert:
-            ga.correction_sam_main(0.5)
-        #ga.center_on_tile(count) put this back if it fucks ups
-        #ga.correction(120, count)
-        # time.sleep(2)ssssssssssssssss
+        ga.correction_sam_main(count)
         speaker.speak(str(count))
-        # drive.on()ss
+        #ga.center_on_tile(count) put this back if it fucks ups
+        #ga.correction(120, count)sss
+        time.sleep(1)
+        drive.on(20,20)
 
         if count == 55 or count == 70 or count == 85 or count == 100:
             tile = 0
@@ -208,15 +208,15 @@ while True:
     light = cs.reflected_light_intensity
     # if index % 10 == 0:#every 10 times do this blocksss
     # light = light / 10# divide light by 10 to get the current averages
-    if ts.is_pressed:  # stop if the touch sensor is pressed
+    if ts.is_pressed:  # stop if the touch sensor is presseds
         drive.off()
         break
     drive.on(SpeedPercent(20), SpeedPercent(20))  # go forwards
 
     if count == 10 and not ga.vert:  # check if we have moved 11 squares forward
         turn_one(light)
-        ga.correction_sam_main(0.4)
-        ga.taya_correction(5)
+        ga.correction_sam_main(count)
+        #ga.taya_correction(5)
 
 
 

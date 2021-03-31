@@ -13,7 +13,7 @@ cs = ColorSensor()
 
 
 class GoalAgent:
-    """The class for all goal agent methods and attributes."""
+    """The class for all goal agent methods and attributess."""
     def vert(self):
         global vert
         return vert
@@ -139,7 +139,7 @@ class GoalAgent:
     def correction_sam_main1(self, count):
         if count <= 1:
             return
-        # move forward to be more on the tile only if not going verts
+        # move forward to be more on the tile only if not going vertsas
         # start the timer
         self.var_forward(0.05)
         start_time = time.time()
@@ -212,11 +212,13 @@ class GoalAgent:
             f.write("\nValue1 is more than Value2, turn left by " + str(val) + "\n")
         f.close()
 
-    def correction_sam_main(self, coef):
-        coef = 0.8
+    def correction_sam_main(self, x):
+        if x == 1:
+            return
+        coef = 0.85
         start_time = time.time()
         while True:
-            # move left(because right wheel is turned on)sss
+            # move left(because right wheel is turned on)ssss
             mRight.on(SpeedPercent(20))
             # if light reflected is not blackss
             if cs.reflected_light_intensity > 20:
@@ -271,7 +273,7 @@ class GoalAgent:
         drive.on_for_rotations(20, 20, 1.85)
         while True:
             if cs.reflected_light_intensity < 15:
-                drive.on_for_rotations(-20, -20, 0.3)
+                drive.on_for_rotations(-20, -20, -1.7)
                 break
             else:
                 drive.off()
