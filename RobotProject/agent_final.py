@@ -193,7 +193,7 @@ ga.var_forward(0.85)
 ga.right90()
 
 # main loop
-index = 0  # counter to keep track of the number of times loops runs. Used to get  averages of cs.reflected_light_intensitys
+index = 0  # counter to keep track of the number of times loops runs. Used to get  averages of cs.reflected_light_intensitysssssssss
 light = 0  # a var to store these averages
 count = 0
 global flip
@@ -208,11 +208,11 @@ while True:
     if ts.is_pressed:  # stop if the touch sensor is pressed
         drive.off()
         break
-    drive.on(SpeedPercent(20), SpeedPercent(20))  # go forward
+    drive.on(SpeedPercent(20), SpeedPercent(20))  # go forwards
 
-    if count == 3 and not ga.vert:  # check if we have moved 11 squares forwardsss
+    if count == 10 and not ga.vert:  # check if we have moved 11 squares forward
         turn_one(light)
-        ga.correction_sam_main(count)
+        ga.correction_sam_main(0.85)
         #ga.taya_correction(5)
 
 
