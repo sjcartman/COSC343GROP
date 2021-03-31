@@ -74,11 +74,11 @@ class GoalAgent:
         drive.on_for_rotations(13, -13, 0.045/2)
         #self.straight_backward(0.525)
         return
+
     def left9(self):
         drive.on_for_rotations(-13, 13, 0.045/1.8)
         #self.straight_backward(0.525)ss
         return
-
 
     def right90(self):
         self.vert = not self.vert
@@ -196,7 +196,7 @@ class GoalAgent:
         # value , value2 = offset, to be used on degrees turned?ss
         const_below = 0.8  # if value is less than this, its too close to one side, so turn more
         """ to fix the errors, change the values here """
-        if self.vert:  #something to add here to fix the turn
+        if self.vert and count != 10:  #something to add here to fix the turn
             val = 5  # base value of degrees turned
             if value2 <= const_below or value <= const_below:
                 val += 7  # turn more if too close to one side
@@ -226,10 +226,8 @@ class GoalAgent:
             else:
                 self.left90()
             self.var_backwards(0.05)
-        self.correction_sam_main(count)
 
     def taya_correction(self, c_value, direction=1):
-        c_value
         drive.on(20, 20)
         start_time = time.time()
         while True:
