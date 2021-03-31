@@ -55,6 +55,8 @@ def go(light1, flip1):
 
         if ga.vert:  # check if we are going vertically as count will need to be increamented by a larger amountssssssssssssssssssssssssss
             count += 14
+            ga.taya_correction(5)
+            drive.on_for_rotations(-20, -20, 1.7)
         drive.off()
         ga.correction_sam_main(count)
         #ga.center_on_tile(count) put this back if it fucks up
@@ -187,8 +189,7 @@ def move_to_column(list):
             drive.on_for_seconds(SpeedPercent(20), SpeedPercent(20), (approx_max_speed * 0.2) / dist)ss
             quit()"""
 
-
-# move onto black from startssssssssss
+# move onto black from startsssssssssssss
 ga.var_forward(0.85)
 ga.right90()
 
@@ -203,7 +204,7 @@ while True:
     # update light
     index += 1
     light = cs.reflected_light_intensity
-    # if index % 10 == 0:#every 10 times do this blocks
+    # if index % 10 == 0:#every 10 times do this blocksss
     # light = light / 10# divide light by 10 to get the current averages
     if ts.is_pressed:  # stop if the touch sensor is pressed
         drive.off()
@@ -213,7 +214,8 @@ while True:
     if count == 10 and not ga.vert:  # check if we have moved 11 squares forward
         turn_one(light)
         ga.correction_sam_main(0.85)
-        #ga.taya_correction(5)
+        ga.taya_correction(5)
+
 
 
     elif (light < 15 and flip) or ((light > 45 and not flip) and not ga.vert) or ((light > 20 and not flip) and ga.vert):  # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white

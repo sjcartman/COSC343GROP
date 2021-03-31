@@ -265,16 +265,15 @@ class GoalAgent:
     def taya_correction(self, c_value, direction=1):
         while cs.reflected_light_intensity < 15:
             drive.on(20, 20)
-        drive.on_for_seconds(20,20,0.3)
         drive.off()
-        drive.on_for_rotations(20, 20, 1.9)
+        drive.on_for_rotations(20, 20, 1.85)
         while True:
             if cs.reflected_light_intensity < 15:
-                drive.on_for_roations(-20, -20, 0.3)
+                drive.on_for_rotations(-20, -20, 0.3)
                 break
             else:
                 drive.off()
-                drive.on_for_seconds(-20, -20, 1.9)
+                drive.on_for_rotations(-20, -20, 1.85)
                 if direction == 1:
                     drive.on_for_degrees(20, -20, c_value)
                     self.taya_correction(c_value + 5, direction=0)
