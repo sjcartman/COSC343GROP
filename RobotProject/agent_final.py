@@ -213,6 +213,7 @@ while True:
     if count == 10 and not ga.vert:  # check if we have moved 11 squares forwardsss
         turn_one(light)
         ga.center_on_tile(count)
+        ga.taya_correction(5)
 
 
     elif (light < 15 and flip) or ((light > 45 and not flip) and not ga.vert) or ((light > 20 and not flip) and ga.vert):  # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
