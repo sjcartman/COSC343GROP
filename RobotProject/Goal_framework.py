@@ -27,6 +27,7 @@ class GoalAgent:
         self.correction_filp = True
         self.max1 = 2
         self.max2 = 2
+        self.moveforward = True
 
     def transition_model(self, speed1, speed2, rotation):
         """Transition model method that updates state values based on actions performed."""
@@ -83,6 +84,8 @@ class GoalAgent:
     def right90(self):
         self.vert = not self.vert
         drive.on_for_rotations(13, -13, 0.95/2)
+        self.max1 = 2
+        self.max2 = 2
         return
 
     def straight_backward(self,rots):
@@ -138,15 +141,14 @@ class GoalAgent:
         if count <= 1:
             return
         # move forward to be more on the tile only if not going verts
-
-        if count <= 54:
-            self.var_forward(0.1)
         # start the timer
+        if count < 10 and self.moveforward:
+            self.var_forward(0.05)
         start_time = time.time()
         while True:
             # move left(because right wheel is turned on)s
             mRight.on(SpeedPercent(20))
-            # if light reflected is not black
+            # if light reflected is not blacks
             if cs.reflected_light_intensity > 30:
                 # record the time
                 end_time = time.time()
@@ -178,10 +180,10 @@ class GoalAgent:
         f = open("stuff.txt", "a")
         valuedif = float("{:.2f}".format(abs(value - value2)))#should i use margin of error?
         """ this too """
-        if valuedif <= 0.1:
-            return
-        if valuedif <= 0.3 and not self.vert:
-            return
+        #if valuedif <= 0.1:
+         #   return
+        #if valuedif <= 0.3 and not self.vert:
+          #  return
         f.write("Count : "
                 + str(count)
                 + "\t"
@@ -194,21 +196,22 @@ class GoalAgent:
                 + str(valuedif))
         # use offset value to change rotations based on value?s
         # value , value2 = offset, to be used on degrees turned?ss
-        const_below = 0.7  # if value is less than this, its too close to one side, so turn more
+        const_below = 0.8  # if value is less than this, its too close to one side, so turn more
         """ to fix the errors, change the values here """
-        if self.vert:  #something to add here to fix the turn
-            val = 10  # base value of degrees turned
+        if self.vert and count != 10:  #something to add here to fix the turn
+            val = 5  # base value of degrees turned
             if value2 <= const_below or value <= const_below:
-                val += 8  # turn more if too close to one side
+                val += 7  # turn more if too close to one side
         else:
             val = 10
             if value2 <= const_below or value <= const_below:
-                val += 15  # turn more if too close to one side
-        # margin of error allowed, smaller margin of error means turns less, bigger means turns moresssss
+                if count != 10:
+                    val += 10  # turn more if too close to one sides
+        # margin of error allowed, smaller margin of error means turns less, bigger means turns moressssss
         if value2 > value:
 
-            #convert to log scale
-           #val = 10 * math.log10(val)
+            #convert to log scales
+           #val = 10 * math.log10(val)ss
             drive.on_for_degrees(SpeedPercent(20), SpeedPercent(-20), val * value2/self.max2)
             f.write("\nValue2 is more than Value, turn right by " + str(val * value2/self.max2) + "\n")
         elif value == value2:
@@ -217,3 +220,12 @@ class GoalAgent:
             drive.on_for_degrees(SpeedPercent(-20), SpeedPercent(20), val * value/self.max1)
             f.write("\nValue1 is more than Value2, turn left by " + str(val * value/self.max1) + "\n")
         f.close()
+
+    #  consider writing the centering code?
+    def center_on_tile(self, count):
+        self.moveforward = True
+        for i in range(0, 4):
+            self.correction_sam_main(count)
+            self.right90()
+            self.moveforward = False
+        self.correction_sam_main(count)

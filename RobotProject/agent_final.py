@@ -57,8 +57,9 @@ def go(light1, flip1):
             count += 14
         drive.off()
         ga.correction_sam_main(count)
+        #ga.center_on_tile(count) put this back if it fucks up
         #ga.correction(120, count)
-        # time.sleep(2)ssssssssssssss
+        # time.sleep(2)sssssssssssssss
         speaker.speak(str(count))
         # drive.on()ss
 
@@ -203,7 +204,7 @@ while True:
     index += 1
     light = cs.reflected_light_intensity
     # if index % 10 == 0:#every 10 times do this blocks
-    # light = light / 10# divide light by 10 to get the current average
+    # light = light / 10# divide light by 10 to get the current averages
     if ts.is_pressed:  # stop if the touch sensor is pressed
         drive.off()
         break
@@ -211,8 +212,7 @@ while True:
 
     if count == 10 and not ga.vert:  # check if we have moved 11 squares forwardsss
         turn_one(light)
-        ga.var_backwards(0.35)
-        ga.correction_sam_main(count)
+        ga.center_on_tile(count)
 
 
     elif (light < 15 and flip) or ((light > 45 and not flip) and not ga.vert) or ((light > 20 and not flip) and ga.vert):  # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
