@@ -233,9 +233,10 @@ class GoalAgent:
         while True:
             test_time = time.time()
             test_total = test_time - start_time
-            if cs.reflected_light_intensity < 15 and test_total < 2.9:
+            if cs.reflected_light_intensity < 15 and test_total < 2.8:
+                drive.on_for_seconds(-20, -20, 1)
                 break
-            elif test_total > 2.9:
+            elif test_total > 2.8:
                 drive.off()
                 # go back
                 drive.on_for_seconds(-20, -20, test_total)
