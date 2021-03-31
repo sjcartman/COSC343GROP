@@ -233,18 +233,14 @@ class GoalAgent:
             drive.on(20, 20)
         drive.on_for_seconds(20,20,0.3)
         drive.off()
-        drive.on(20, 20)
-        start_time = time.time()
+        drive.on_for_rotations(20, 20, 1.9)
         while True:
-            test_time = time.time()
-            test_total = test_time - start_time
-            if cs.reflected_light_intensity < 15 and test_total < 3:
-                drive.on_for_seconds(-20, -20, 1)
+            if cs.reflected_light_intensity < 15:
+                drive.on_for_roations(-20, -20, 0.3)
                 break
-            elif test_total > 3:
+            else:
                 drive.off()
-                # go back
-                drive.on_for_seconds(-20, -20, test_total)
+                drive.on_for_seconds(-20, -20, 1.9)
                 if direction == 1:
                     drive.on_for_degrees(20, -20, c_value)
                     self.taya_correction(c_value + 5, direction=0)
