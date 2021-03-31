@@ -194,7 +194,7 @@ ga.var_forward(0.85)
 ga.right90()
 
 # main loop
-index = 0  # counter to keep track of the number of times loops runs. Used to get  averages of cs.reflected_light_intensitysssssssss
+index = 0  # counter to keep track of the number of times loops runs. Used to get  averages of cs.reflected_light_intensityssssssssss
 light = 0  # a var to store these averages
 count = 0
 global flip
@@ -213,7 +213,7 @@ while True:
 
     if count == 10 and not ga.vert:  # check if we have moved 11 squares forward
         turn_one(light)
-        ga.correction_sam_main(0.85)
+        ga.correction_sam_main(0.5)
         ga.taya_correction(5)
 
 

@@ -215,7 +215,7 @@ class GoalAgent:
     def correction_sam_main(self, coef):
         start_time = time.time()
         while True:
-            # move left(because right wheel is turned on)s
+            # move left(because right wheel is turned on)
             mRight.on(SpeedPercent(20))
             # if light reflected is not blacks
             if cs.reflected_light_intensity > 20:
@@ -229,7 +229,7 @@ class GoalAgent:
                 break
         # return back to normal position
         mRight.on_for_seconds(SpeedPercent(-20), value)
-        # repeat the above for the right(left wheel now turned on)
+        # repeat the above for the right(left wheel now turned on)s
         start_time = time.time()
         while True:
             mLeft.on(SpeedPercent(20))
@@ -255,8 +255,7 @@ class GoalAgent:
 
 
     def rad_to_deg(self,rad):
-        rad *= 180
-        rad /= math.pi
+        rad *= 180/math.pi
         return  rad
     def time_to_rads(self,time):
         return time/2.71139001846
