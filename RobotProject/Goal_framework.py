@@ -199,10 +199,10 @@ class GoalAgent:
             val = 10
             if value2 <= const_below or value <= const_below:
                 val += 10  # turn more if too close to one sides
-        # margin of error allowed, smaller margin of error means turns less, bigger means turns mores
-        if value2 > value:
+        # margin of error allowed, smaller margin of error means turns less, bigger means turns more
             #convert to log scaless
-            val = 10 * math.log10(abs(value - value2))
+        if value2 > value:
+            #val = 10 * math.log10(abs(value - value2))
             drive.on_for_degrees(SpeedPercent(20), SpeedPercent(-20), val)
             f.write("\nValue2 is more than Value, turn right by " + str(val) + "\n")
         elif value == value2:
