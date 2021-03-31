@@ -39,7 +39,7 @@ def turn_one(light1):
 # go forward, and check for tiles
 # once at tile 55,70,85, and 100 it will move to forward into the grey tile
 # and starts calling the find_bottle method. Stores the returned value from
-# find_bottle method in "tile" variable and use it to check which tile the tower is located.s
+# find_bottle method in "tile" variable and use it to check which tile the tower is located.
 def go(light1, flip1):
     global count
     global move
@@ -56,7 +56,7 @@ def go(light1, flip1):
         if ga.vert:  # check if we are going vertically as count will need to be increamented by a larger amountssssssssssssssssssssssssss
             count += 14
         drive.off()
-        ga.correction_sam_main(count)
+        ga.correction_sam_main_sean(count)
         #ga.correction(120, count)
         # time.sleep(2)ssssssssssssss
         speaker.speak(str(count))
@@ -207,12 +207,11 @@ while True:
     if ts.is_pressed:  # stop if the touch sensor is pressed
         drive.off()
         break
-    drive.on(SpeedPercent(20), SpeedPercent(20))  # go forward
+    drive.on(SpeedPercent(20), SpeedPercent(19.9))  # go forward
 
-    if count == 10 and not ga.vert:  # check if we have moved 11 squares forwardsss
+    if count == 10 and not ga.vert:  # check if we have moved 11 squares forward
         turn_one(light)
-        ga.var_backwards(0.35)
-        ga.correction_sam_main(count)
+        ga.correction_sam_main_sean(count)
 
 
     elif (light < 15 and flip) or ((light > 45 and not flip) and not ga.vert) or ((light > 20 and not flip) and ga.vert):  # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white

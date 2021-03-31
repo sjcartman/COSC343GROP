@@ -3,7 +3,7 @@ from ev3dev2.motor import LargeMotor, OUTPUT_B, OUTPUT_C, SpeedPercent, MoveTank
 from ev3dev2.sound import Sound
 from ev3dev2.sensor.lego import ColorSensor
 import time
-import sys
+import sys, math
 
 mLeft = LargeMotor(OUTPUT_B)
 mRight = LargeMotor(OUTPUT_C)
@@ -24,6 +24,9 @@ class GoalAgent:
         self.angle = 90
         self.current_square = None
         self.vert = True
+        self.correction_filp = True
+        self.max1 = 2
+        self.max2 = 2
 
     def transition_model(self, speed1, speed2, rotation):
         """Transition model method that updates state values based on actions performed."""
@@ -98,6 +101,9 @@ class GoalAgent:
     def var_forward(self, value):
         drive.on_for_rotations(20,20,value)
 
+    def var_backwards(self, value):
+        drive.on_for_rotations(-20,-20,value)
+
     """method to keep the robot straighssssssssssssss
     ss"""
     def correction(self, value, count):
@@ -121,9 +127,17 @@ class GoalAgent:
             time.sleep(0.1)
 
     def correction_sam(self, count):
-        if count <= 1 or count == 10:
+        self.correction_filp = True
+        self.correction_sam_main(count)
+
+    def correction_sean(self, count):
+        self.correction_filp = True
+        self.correction_sam_main_sean(count)
+
+    def correction_sam_main(self, count):
+        if count <= 1:
             return
-        # move forward to be more on the tile only if not going vert
+        # move forward to be more on the tile only if not going verts
 
         if count <= 54:
             self.var_forward(0.1)
@@ -155,42 +169,51 @@ class GoalAgent:
                 break
         mLeft.on_for_seconds(SpeedPercent(-20), value2)
         # round the values off to get an estimate(to 1 decimal place? not sure if it works)
+        if value > self.max1:
+            self.max1 = value
+        if value2 > self.max2:
+            self.max2 = value2
         value2 = float("{:.2f}".format(value2))
         value = float("{:.2f}".format(value))
         f = open("stuff.txt", "a")
-        valuedif = abs(value - value2)
+        valuedif = float("{:.2f}".format(abs(value - value2)))#should i use margin of error?
+        """ this too """
+        if valuedif <= 0.1:
+            return
+        if valuedif <= 0.3 and not self.vert:
+            return
         f.write("Count : "
                 + str(count)
                 + "\t"
-                + "value2: "
-                + str(value2)
-                + "\t"
-                + " value:"
+                + "value: "
                 + str(value)
-                + "\tSum Diff:"
-                + str(valuedif)
-                + "\t")
-        f.close()
+                + "\t"
+                + " value2: "
+                + str(value2)
+                + "\tSum Diff: "
+                + str(valuedif))
         # use offset value to change rotations based on value?s
-        # value , value2 = offset, to be used on degrees turned?
-
-        # margin of error allowed, smaller margin of error means turns less, bigger means turns mores
-
-        if valuedif <= 0.1:
-            return
-        # if margin of error is large, change the fluctval to 20, if medium, 15, if small 10s
-        if valuedif >= 0.6 and count < 10:  # large
-            fluctval = 20
-        elif valuedif >= 0.3 and count < 10:  # medium
-            fluctval = 15
-        elif valuedif >= 0.2:  # small
-            fluctval = 7.5
-        else :
-            fluctval = 5
+        # value , value2 = offset, to be used on degrees turned?ss
+        const_below = 0.7  # if value is less than this, its too close to one side, so turn more
+        """ to fix the errors, change the values here """
+        if self.vert:  #something to add here to fix the turn
+            val = 10  # base value of degrees turned
+            if value2 <= const_below or value <= const_below:
+                val += 8  # turn more if too close to one side
+        else:
+            val = 10
+            if value2 <= const_below or value <= const_below:
+                val += 15  # turn more if too close to one side
+        # margin of error allowed, smaller margin of error means turns less, bigger means turns moresssss
         if value2 > value:
-            # fixed 20 degree rotations
-            drive.on_for_degrees(SpeedPercent(20), SpeedPercent(-20), fluctval)
+
+            #convert to log scale
+           #val = 10 * math.log10(val)
+            drive.on_for_degrees(SpeedPercent(20), SpeedPercent(-20), val * value2/self.max2)
+            f.write("\nValue2 is more than Value, turn right by " + str(val * value2/self.max2) + "\n")
         elif value == value2:
             return
         else:
-            drive.on_for_degrees(SpeedPercent(-20), SpeedPercent(20), fluctval)
+            drive.on_for_degrees(SpeedPercent(-20), SpeedPercent(20), val * value/self.max1)
+            f.write("\nValue1 is more than Value2, turn left by " + str(val * value/self.max1) + "\n")
+        f.close()
