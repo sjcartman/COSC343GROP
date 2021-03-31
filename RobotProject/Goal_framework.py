@@ -25,8 +25,9 @@ class GoalAgent:
         self.current_square = None
         self.vert = True
         self.correction_filp = True
-        self.max1 = 2
-        self.max2 = 2
+        self.max1 = 0
+        self.max2 = 0
+        self.value_difference = 10
 
     def transition_model(self, speed1, speed2, rotation):
         """Transition model method that updates state values based on actions performed."""
@@ -135,12 +136,8 @@ class GoalAgent:
     def correction_sean(self, count):
         self.correction_filp = True
         self.correction_sam_main_sean(count)
-
+    # the base method to record time taken in both directions
     def correction_sam_main1(self, count):
-        if count <= 1:
-            return
-        # move forward to be more on the tile only if not going vertsas
-        # start the timer
         self.var_forward(0.05)
         start_time = time.time()
         while True:
@@ -154,6 +151,7 @@ class GoalAgent:
                 value = end_time - start_time
                 # stop the motors
                 drive.off()
+                sleep(0.1)
                 # break out of the surrounding while loop
                 break
         # return back to normal position
@@ -166,51 +164,26 @@ class GoalAgent:
                 end_time = time.time()
                 value2 = end_time - start_time
                 drive.off()
+                sleep(0.1)
                 break
         mLeft.on_for_seconds(SpeedPercent(-20), value2)
-        value2 = float("{:.2f}".format(value2))
-        value = float("{:.2f}".format(value))
-        f = open("stuff.txt", "a")
-        valuedif = float("{:.2f}".format(abs(value - value2)))#should i use margin of errorsss?
-        """ this too """
-        if valuedif <= 0.1:
+        # if either max1 or max2 has not yet been set, use the current two as the first values
+        if self.max1 == 0 or self.max2 == 0:
+            self.max1 = value
+            self.max2 = value2
+            self.value_difference = abs(value - value2)
             return
-        if valuedif <= 0.05 and not self.vert:
-            return
-        f.write("Count : "
-                + str(count)
-                + "\t"
-                + "value: "
-                + str(value)
-                + "\t"
-                + " value2: "
-                + str(value2)
-                + "\tSum Diff: "
-                + str(valuedif))
-        # use offset value to change rotations based on value?
-        # value , value2 = offset, to be used on degrees turned?ss
-        const_below = 0.5  # if value is less than this, its too close to one side, so turn more
-        """ to fix the errors, change the values here """
-        if self.vert:  #something to add here to fix the turn
-            val = 5  # base value of degrees turned
-            if value2 <= const_below or value <= const_below:
-                val += 7  # turn more if too close to one side
-        else:
-            val = 10
-            if value2 <= const_below or value <= const_below:
-                val += 10  # turn more if too close to one sides
-        # margin of error allowed, smaller margin of error means turns less, bigger means turns moressss
-            #convert to log scaless
-        if value2 > value:
-            #val = 10 * math.log10(abs(value - value2))
-            drive.on_for_degrees(SpeedPercent(20), SpeedPercent(-20), value2/self.max2)
-            f.write("\nValue2 is more than Value, turn right by " + str(val) + "\n")
-        elif value == value2:
-            return
-        else:
-            drive.on_for_degrees(SpeedPercent(-20), SpeedPercent(20), value/self.max1)
-            f.write("\nValue1 is more than Value2, turn left by " + str(val) + "\n")
-        f.close()
+        # one of these will evaluate to a positive, and the other to a negative. 
+        # We want to turn in the direction of the positive, based on the difference between the previous and current value. 
+        if (value2 - self.max2) > 0:
+            mLeft.on_for_seconds(SpeedPercent(20), value2 - self.max2 * 0.5)
+        elif (value - self.max1) > 0:
+            mRight.on_for_seconds(SpeedPercent(20), value - self.max1 * 0.5)
+        # set the max to the new one (we can implement valuedif such that this only sets if valuedif is smaller than previously).
+        if self.value_difference > abs(value-value2):
+            self.max1 = value
+            self.max2 = value2
+            self.value_difference = abs(value-value2)
 
     def correction_sam_main(self, x):
         if x == 1:
