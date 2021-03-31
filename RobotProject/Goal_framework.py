@@ -212,7 +212,8 @@ class GoalAgent:
             f.write("\nValue1 is more than Value2, turn left by " + str(val) + "\n")
         f.close()
 
-    def correction_sam_main(self, coef):
+    def correction_sam_main(self):
+        coef = 0.6
         start_time = time.time()
         while True:
             # move left(because right wheel is turned on)
@@ -229,7 +230,7 @@ class GoalAgent:
                 break
         # return back to normal position
         mRight.on_for_seconds(SpeedPercent(-20), value)
-        # repeat the above for the right(left wheel now turned on)s
+        # repeat the above for the right(left wheel now turned on)ssssss
         start_time = time.time()
         while True:
             mLeft.on(SpeedPercent(20))
@@ -247,11 +248,13 @@ class GoalAgent:
 
         cirle_4 = math.atan(cirle_3)
         cirle_5 = self.rad_to_deg(cirle_4)
-
+        #max = 90
+        #if cirle_5 > max :
+        #    cirle_5 *= 0.5
         if cirle_1 > cirle_2:
-            drive.on_for_degrees(-20,20,cirle_5 * coef)
+            drive.on_for_degrees(-20, 20, cirle_5 * coef)
         elif cirle_2 > cirle_1:
-            drive.on_for_degrees(20,-20,cirle_5 * coef)
+            drive.on_for_degrees(20, -20, cirle_5 * coef)
 
 
     def rad_to_deg(self,rad):

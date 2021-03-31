@@ -59,8 +59,8 @@ def go(light1, flip1):
             drive.on_for_rotations(-20, -20, 1.7)
         drive.off()
         if not ga.vert:
-            ga.correction_sam_main(count)
-        #ga.center_on_tile(count) put this back if it fucks up
+            ga.correction_sam_main(0.5)
+        #ga.center_on_tile(count) put this back if it fucks ups
         #ga.correction(120, count)
         # time.sleep(2)sssssssssssssss
         speaker.speak(str(count))
@@ -214,7 +214,7 @@ while True:
 
     if count == 10 and not ga.vert:  # check if we have moved 11 squares forward
         turn_one(light)
-        ga.correction_sam_main(0.5)
+        ga.correction_sam_main(0.4)
         ga.taya_correction(5)
 
 
