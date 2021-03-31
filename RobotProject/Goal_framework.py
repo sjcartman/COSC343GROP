@@ -229,6 +229,9 @@ class GoalAgent:
         self.correction_sam_main(count)
 
     def taya_correction(self, c_value, direction=1):
+        while cs.reflected_light_intensity < 15:
+            drive.on()
+        drive.off()
         drive.on(20, 20)
         start_time = time.time()
         while True:
