@@ -282,7 +282,7 @@ class GoalAgent:
                     break
                 else:
                     drive.on_for_degrees(-20, 20, c_value * 2)
-                    self.taya_correction(c_value, direction=1)
+                    self.taya_correction(c_value + 5, direction=1)
                     break
 
 
