@@ -57,7 +57,7 @@ def go(light1, flip1):
             count += 14
             ga.correction_sam_main(0.4)
             ga.taya_correction(5)
-            drive.on_for_rotations(-20, -20, 1.7)
+            drive.on_for_rotations(-20, -20, 1.85)
         drive.off()
         if not ga.vert:
             ga.correction_sam_main(0.5)
