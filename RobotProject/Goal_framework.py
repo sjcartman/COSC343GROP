@@ -178,9 +178,9 @@ class GoalAgent:
         f = open("stuff.txt", "a")
         valuedif = float("{:.2f}".format(abs(value - value2)))#should i use margin of errorsss?
         """ this too """
-        if valuedif <= 0.2:
+        if valuedif < 0.4:
             return
-        if valuedif <= 0.1 and not self.vert:
+        if valuedif < 0.2 and not self.vert:
             return
         f.write("Count : "
                 + str(count)
@@ -194,9 +194,9 @@ class GoalAgent:
                 + str(valuedif))
         # use offset value to change rotations based on value?s
         # value , value2 = offset, to be used on degrees turned?ss
-        const_below = 0.8  # if value is less than this, its too close to one side, so turn more
+        const_below = 0.4  # if value is less than this, its too close to one side, so turn more
         """ to fix the errors, change the values here """
-        if self.vert and count != 10:  #something to add here to fix the turn
+        if self.vert:  #something to add here to fix the turn
             val = 5  # base value of degrees turned
             if value2 <= const_below or value <= const_below:
                 val += 7  # turn more if too close to one side
@@ -216,16 +216,6 @@ class GoalAgent:
             drive.on_for_degrees(SpeedPercent(-20), SpeedPercent(20), val * value/self.max1)
             f.write("\nValue1 is more than Value2, turn left by " + str(val * value/self.max1) + "\n")
         f.close()
-
-    #  consider writing the centering code?
-    def center_on_tile(self, count):
-        for i in range(0, 4):
-            self.correction_sam_main(count)
-            if i % 2 == 0:
-                self.right90()
-            else:
-                self.left90()
-            self.var_backwards(0.05)
 
     def taya_correction(self, c_value, direction=1):
         drive.on(20, 20)
