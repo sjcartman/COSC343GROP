@@ -249,9 +249,9 @@ class GoalAgent:
         cirle_5 = self.rad_to_deg(cirle_4)
 
         if cirle_1 > cirle_2:
-            drive.on_for_degrees(20,-20,cirle_5 * coef)
-        elif cirle_2 > cirle_1:
             drive.on_for_degrees(-20,20,cirle_5 * coef)
+        elif cirle_2 > cirle_1:
+            drive.on_for_degrees(20,-20,cirle_5 * coef)
 
 
     def rad_to_deg(self,rad):
