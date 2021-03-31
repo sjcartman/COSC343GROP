@@ -27,7 +27,6 @@ class GoalAgent:
         self.correction_filp = True
         self.max1 = 2
         self.max2 = 2
-        self.moveforward = True
 
     def transition_model(self, speed1, speed2, rotation):
         """Transition model method that updates state values based on actions performed."""
@@ -142,8 +141,7 @@ class GoalAgent:
             return
         # move forward to be more on the tile only if not going verts
         # start the timer
-        if count < 10 and self.moveforward:
-            self.var_forward(0.05)
+        self.var_forward(0.05)
         start_time = time.time()
         while True:
             # move left(because right wheel is turned on)s
@@ -178,12 +176,12 @@ class GoalAgent:
         value2 = float("{:.2f}".format(value2))
         value = float("{:.2f}".format(value))
         f = open("stuff.txt", "a")
-        valuedif = float("{:.2f}".format(abs(value - value2)))#should i use margin of error?
+        valuedif = float("{:.2f}".format(abs(value - value2)))#should i use margin of errorsss?
         """ this too """
-        #if valuedif <= 0.1:
-         #   return
-        #if valuedif <= 0.3 and not self.vert:
-          #  return
+        if valuedif <= 0.2:
+            return
+        if valuedif <= 0.1 and not self.vert:
+            return
         f.write("Count : "
                 + str(count)
                 + "\t"
@@ -198,18 +196,16 @@ class GoalAgent:
         # value , value2 = offset, to be used on degrees turned?ss
         const_below = 0.8  # if value is less than this, its too close to one side, so turn more
         """ to fix the errors, change the values here """
-        if self.vert and count != 10:  #something to add here to fix the turn
+        if self.vert:  #something to add here to fix the turn
             val = 5  # base value of degrees turned
             if value2 <= const_below or value <= const_below:
                 val += 7  # turn more if too close to one side
         else:
             val = 10
             if value2 <= const_below or value <= const_below:
-                if count != 10:
-                    val += 10  # turn more if too close to one sides
+                val += 10  # turn more if too close to one sides
         # margin of error allowed, smaller margin of error means turns less, bigger means turns moressssss
         if value2 > value:
-
             #convert to log scales
            #val = 10 * math.log10(val)ss
             drive.on_for_degrees(SpeedPercent(20), SpeedPercent(-20), val * value2/self.max2)
@@ -223,34 +219,15 @@ class GoalAgent:
 
     #  consider writing the centering code?
     def center_on_tile(self, count):
-        self.moveforward = True
         for i in range(0, 4):
             self.correction_sam_main(count)
-            self.right90()
-            self.moveforward = False
+            if i % 2 == 0:
+                self.right90()
+            else:
+                self.left90()
+            self.var_backwards(0.05)
         self.correction_sam_main(count)
 
-    def taya_correction(self, c_value, direction=1):
-        c_value
-        drive.on(20, 20)
-        start_time = time.time()
-        while True:
-            test_time = time.time()
-            test_total = test_time - start_time
-            if cs.reflected_light_intensity < 15 and test_total < 2.9:
-                break
-            elif test_total > 2.9:
-                drive.off()
-                # go back
-                drive.on_for_seconds(-20, -20, test_total)
-                if direction == 1:
-                    drive.on_for_degrees(20, -20, c_value)
-                    self.taya_correction(c_value + 5, direction=0)
-                    break
-                else:
-                    drive.on_for_degrees(20, -20, c_value*2)
-                    self.taya_correction(c_value, direction=1)
-                    break
 
 
 

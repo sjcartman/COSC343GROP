@@ -171,3 +171,5 @@ class GoalAgent1:
             self.current_travel_direction = 'Vertical'
         else:
             self.current_travel_direction = 'Horizontal'
+
+

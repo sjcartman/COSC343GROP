@@ -77,44 +77,44 @@ def go(light1, flip1):
             else:
                 a = True
                 if count == 55:
-                    speaker.speak("tower at {}", str(tile))
+                    speaker.speak("tower at {}".format(str(tile)))
                     found = True
                 elif count == 70:
                     if tile == 1:
-                        speaker.speak("tower at {}", str(4))
+                        speaker.speak("tower at {}".format(str(4)))
                         found = True
                     elif tile == 2:
-                        speaker.speak("tower at {}", str(5))
+                        speaker.speak("tower at {}".format(str(5)))
                         found = True
                     elif tile == 3:
-                        speaker.speak(str(6))
+                        speaker.speak("tower at {}".format(str(6)))
                         found = True
                 elif count == 85:
                     if tile == 1:
-                        speaker.speak(str(7))
+                        speaker.speak("tower at {}".format(str(7)))
                         found = True
                     elif tile == 2:
-                        speaker.speak(str(8))
+                        speaker.speak("tower at {}".format(str(8)))
                         found = True
                     elif tile == 3:
-                        speaker.speak(str(9))
+                        speaker.speak("tower at {}".format(str(9)))
                         found = True
                 elif count == 100:
                     if tile == 1:
-                        speaker.speak(str(10))
+                        speaker.speak("tower at {}".format(str(10)))
                         print(10)
                         found = True
                     elif tile == 2:
-                        speaker.speak(str(11))
+                        speaker.speak("tower at {}".format(str(11)))
                         print(11)
                         found = True
                     elif tile == 3:
-                        speaker.speak(str(12))
+                        speaker.speak("tower at {}".format(str(12)))
                         print(12)
                         found = True
 
             if found:
-                time.sleep(5)
+                time.sleep(100)
                 quit()
             else:
                 ga.right90()
@@ -213,7 +213,6 @@ while True:
     if count == 10 and not ga.vert:  # check if we have moved 11 squares forwardsss
         turn_one(light)
         ga.center_on_tile(count)
-        ga.taya_correction(5)
 
 
     elif (light < 15 and flip) or ((light > 45 and not flip) and not ga.vert) or ((light > 20 and not flip) and ga.vert):  # checking the the light level is below 15 and were on black or if light level is above 45 and we were on white
