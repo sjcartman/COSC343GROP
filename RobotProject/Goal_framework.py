@@ -199,7 +199,7 @@ class GoalAgent:
             val = 10
             if value2 <= const_below or value <= const_below:
                 val += 10  # turn more if too close to one sides
-        # margin of error allowed, smaller margin of error means turns less, bigger means turns mores
+        # margin of error allowed, smaller margin of error means turns less, bigger means turns moressss
             #convert to log scaless
         if value2 > value:
             #val = 10 * math.log10(abs(value - value2))
@@ -208,17 +208,17 @@ class GoalAgent:
         elif value == value2:
             return
         else:
-            drive.on_for_degrees(SpeedPercent(-20), SpeedPercent(20), value1/self.max1)
+            drive.on_for_degrees(SpeedPercent(-20), SpeedPercent(20), value/self.max1)
             f.write("\nValue1 is more than Value2, turn left by " + str(val) + "\n")
         f.close()
 
-    def correction_sam_main(self):
-        coef = 0.6
+    def correction_sam_main(self, coef):
+        coef = 0.8
         start_time = time.time()
         while True:
-            # move left(because right wheel is turned on)
+            # move left(because right wheel is turned on)sss
             mRight.on(SpeedPercent(20))
-            # if light reflected is not blacks
+            # if light reflected is not blackss
             if cs.reflected_light_intensity > 20:
                 # record the time
                 end_time = time.time()
@@ -249,7 +249,7 @@ class GoalAgent:
         cirle_4 = math.atan(cirle_3)
         cirle_5 = self.rad_to_deg(cirle_4)
         #max = 90
-        #if cirle_5 > max :
+        #if cirle_5 > max :s
         #    cirle_5 *= 0.5
         if cirle_1 > cirle_2:
             drive.on_for_degrees(-20, 20, cirle_5 * coef)
@@ -281,7 +281,7 @@ class GoalAgent:
                     self.taya_correction(c_value + 5, direction=0)
                     break
                 else:
-                    drive.on_for_degrees(-20, 20, c_value * 2)
+                    drive.on_for_degrees(-20, 20, c_value)
                     self.taya_correction(c_value + 5, direction=1)
                     break
 

@@ -55,6 +55,7 @@ def go(light1, flip1):
 
         if ga.vert:  # check if we are going vertically as count will need to be increamented by a larger amountssssssssssssssssssssssssss
             count += 14
+            ga.correction_sam_main(0.4)
             ga.taya_correction(5)
             drive.on_for_rotations(-20, -20, 1.7)
         drive.off()
@@ -62,7 +63,7 @@ def go(light1, flip1):
             ga.correction_sam_main(0.5)
         #ga.center_on_tile(count) put this back if it fucks ups
         #ga.correction(120, count)
-        # time.sleep(2)sssssssssssssss
+        # time.sleep(2)ssssssssssssssss
         speaker.speak(str(count))
         # drive.on()ss
 
@@ -195,8 +196,8 @@ ga.var_forward(0.85)
 ga.right90()
 
 # main loop
-index = 0  # counter to keep track of the number of times loops runs. Used to get  averages of cs.reflected_light_intensityssssssssss
-light = 0  # a var to store these averages
+index = 0  # counter to keep track of the number of times loops runs. Used to get  averages of cs.reflected_light_intensityss
+light = 0  # a var to store these averagesss
 count = 0
 global flip
 
