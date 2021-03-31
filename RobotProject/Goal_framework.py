@@ -74,11 +74,11 @@ class GoalAgent:
         drive.on_for_rotations(13, -13, 0.045/2)
         #self.straight_backward(0.525)
         return
+
     def left9(self):
         drive.on_for_rotations(-13, 13, 0.045/1.8)
         #self.straight_backward(0.525)ss
         return
-
 
     def right90(self):
         self.vert = not self.vert
@@ -136,7 +136,7 @@ class GoalAgent:
         self.correction_filp = True
         self.correction_sam_main_sean(count)
 
-    def correction_sam_main(self, count):
+    def correction_sam_main1(self, count):
         if count <= 1:
             return
         # move forward to be more on the tile only if not going verts
@@ -147,7 +147,7 @@ class GoalAgent:
             # move left(because right wheel is turned on)s
             mRight.on(SpeedPercent(20))
             # if light reflected is not blacks
-            if cs.reflected_light_intensity > 30:
+            if cs.reflected_light_intensity > 20:
                 # record the time
                 end_time = time.time()
                 # save it into a value
@@ -162,25 +162,20 @@ class GoalAgent:
         start_time = time.time()
         while True:
             mLeft.on(SpeedPercent(20))
-            if cs.reflected_light_intensity > 30:
+            if cs.reflected_light_intensity > 20:
                 end_time = time.time()
                 value2 = end_time - start_time
                 drive.off()
                 break
         mLeft.on_for_seconds(SpeedPercent(-20), value2)
-        # round the values off to get an estimate(to 1 decimal place? not sure if it works)
-        if value > self.max1:
-            self.max1 = value
-        if value2 > self.max2:
-            self.max2 = value2
         value2 = float("{:.2f}".format(value2))
         value = float("{:.2f}".format(value))
         f = open("stuff.txt", "a")
         valuedif = float("{:.2f}".format(abs(value - value2)))#should i use margin of errorsss?
         """ this too """
-        if valuedif <= 0.2:
+        if valuedif <= 0.1:
             return
-        if valuedif <= 0.1 and not self.vert:
+        if valuedif <= 0.05 and not self.vert:
             return
         f.write("Count : "
                 + str(count)
@@ -192,9 +187,9 @@ class GoalAgent:
                 + str(value2)
                 + "\tSum Diff: "
                 + str(valuedif))
-        # use offset value to change rotations based on value?s
+        # use offset value to change rotations based on value?
         # value , value2 = offset, to be used on degrees turned?ss
-        const_below = 0.8  # if value is less than this, its too close to one side, so turn more
+        const_below = 0.5  # if value is less than this, its too close to one side, so turn more
         """ to fix the errors, change the values here """
         if self.vert:  #something to add here to fix the turn
             val = 5  # base value of degrees turned
@@ -204,29 +199,68 @@ class GoalAgent:
             val = 10
             if value2 <= const_below or value <= const_below:
                 val += 10  # turn more if too close to one sides
-        # margin of error allowed, smaller margin of error means turns less, bigger means turns moressssss
+        # margin of error allowed, smaller margin of error means turns less, bigger means turns mores
+            #convert to log scaless
         if value2 > value:
-            #convert to log scales
-           #val = 10 * math.log10(val)ss
-            drive.on_for_degrees(SpeedPercent(20), SpeedPercent(-20), val * value2/self.max2)
-            f.write("\nValue2 is more than Value, turn right by " + str(val * value2/self.max2) + "\n")
+            #val = 10 * math.log10(abs(value - value2))
+            drive.on_for_degrees(SpeedPercent(20), SpeedPercent(-20), value2/self.max2)
+            f.write("\nValue2 is more than Value, turn right by " + str(val) + "\n")
         elif value == value2:
             return
         else:
-            drive.on_for_degrees(SpeedPercent(-20), SpeedPercent(20), val * value/self.max1)
-            f.write("\nValue1 is more than Value2, turn left by " + str(val * value/self.max1) + "\n")
+            drive.on_for_degrees(SpeedPercent(-20), SpeedPercent(20), value1/self.max1)
+            f.write("\nValue1 is more than Value2, turn left by " + str(val) + "\n")
         f.close()
 
-    #  consider writing the centering code?ssssssssss
-    def center_on_tile(self, count):
-        for i in range(0, 4):
-            self.correction_sam_main(count)
-            if i % 2 == 0:
-                self.right90()
-            else:
-                self.left90()
-            self.var_backwards(0.05)
-        self.correction_sam_main(count)
+    def correction_sam_main(self, coef):
+        start_time = time.time()
+        while True:
+            # move left(because right wheel is turned on)s
+            mRight.on(SpeedPercent(20))
+            # if light reflected is not blacks
+            if cs.reflected_light_intensity > 20:
+                # record the time
+                end_time = time.time()
+                # save it into a value
+                value = end_time - start_time
+                # stop the motors
+                drive.off()
+                # break out of the surrounding while loop
+                break
+        # return back to normal position
+        mRight.on_for_seconds(SpeedPercent(-20), value)
+        # repeat the above for the right(left wheel now turned on)
+        start_time = time.time()
+        while True:
+            mLeft.on(SpeedPercent(20))
+            if cs.reflected_light_intensity > 20:
+                end_time = time.time()
+                value2 = end_time - start_time
+                drive.off()
+                break
+        mLeft.on_for_seconds(SpeedPercent(-20), value2)
+
+        cirle_1 = self.time_to_rads(value)
+        cirle_2 = self.time_to_rads(value2)
+
+        cirle_3 = abs((cirle_1 - cirle_2)/2)
+
+        cirle_4 = math.atan(cirle_3)
+        cirle_5 = self.rad_to_deg(cirle_4)
+
+        if cirle_1 > cirle_2:
+            drive.on_for_degrees(20,-20,cirle_5 * coef)
+        elif cirle_2 > cirle_1:
+            drive.on_for_degrees(-20,20,cirle_5 * coef)
+
+
+    def rad_to_deg(self,rad):
+        rad *= 180
+        rad /= math.pi
+        return  rad
+    def time_to_rads(self,time):
+        return time/2.71139001846
+
 
     def taya_correction(self, c_value, direction=1):
         while cs.reflected_light_intensity < 15:
