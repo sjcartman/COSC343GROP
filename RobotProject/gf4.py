@@ -45,7 +45,7 @@ class GoalAgent1:
             speaker.speak(str(self.current_black_square))
             self.percept_sequence.append('Black')
             #print(f"Action #1. Last percept sequence = {self.percept_sequence}, light_percept = {light_percept}")
-            self.calibrate()
+            self.correction()
 
         elif self.percept_sequence[-1] == 'Black' and light_percept == 'White':
             self.percept_sequence.append('White')
@@ -85,38 +85,61 @@ class GoalAgent1:
             drive.off()
             self.find_bottle_with_list()
 
-    def calibrate(self):
-        # test which side is closera
-        drive.off
-
-        # check left leanssss
-        counter = 0
-        while cs.reflected_light_intensity < 17:
-            drive.on_for_rotations(-13, 13, 0.1)
-            counter = counter + 1
-
-        # reset
-        self.calibrate_data.append(counter)
-        if len(self.calibrate_data) > 4:
-            average = sum(self.calibrate_data)/len(self.calibrate_data)
-            drive.on_for_rotations(13, -13, 0.1 * counter + 0.1*(math.log(average / counter)))
+    def correction(self):
+        # move forward to be more on the tile
+        self.var_forward(0.1)
+        # start the timer
+        start_time = time.time()
+        while True:
+            # move left(because right wheel is turned on)s
+            mRight.on(SpeedPercent(20))
+            # if light reflected is not black
+            if cs.reflected_light_intensity > 30:
+                # record the time
+                end_time = time.time()
+                # save it into a value
+                value = end_time - start_time
+                # stop the motors
+                drive.off()
+                # break out of the surrounding while loop
+                break
+        # return back to normal position
+        mRight.on_for_seconds(SpeedPercent(-20), value)
+        # repeat the above for the right(left wheel now turned on)
+        start_time = time.time()
+        while True:
+            mLeft.on(SpeedPercent(20))
+            if cs.reflected_light_intensity > 30:
+                end_time = time.time()
+                value2 = end_time - start_time
+                drive.off()
+                break
+        mLeft.on_for_seconds(SpeedPercent(-20), value2)
+        # round the values off to get an estimate(to 1 decimal place? not sure if it works)
+        value2 = float("{:.1f}".format(value2))
+        value = float("{:.1f}".format(value))
+        # if one is higher, turn one way by 25 degrees, else turn other, else if same go straight
+        f = open("stuff.txt", "a")
+        valuesum = value2 + value
+        f.write("value2: " + str(value2) + " value:" + str(value) + "\nSum Value:" + str(valuesum) + "\n")
+        f.close()
+        # use offset value to change rotations based on value?
+        # value , value2 = offset, to be used on degrees turned?
+        #
+        # 5 + (20 * valuedesc)
+        valuedif = abs(value - value2)
+        # margin of error allowed
+        if valuedif < 0.2:
+            return
+        if value2 > value:
+            # fixed 20 degree rotation
+            valuedesc = value2 / valuesum
+            drive.on_for_degrees(SpeedPercent(20), SpeedPercent(-20), 20)
+        elif value == value2:
+            return
         else:
-            drive.on_for_rotations(13, -13, 0.1*counter)
-
-
-        # check right lean
-        counter2 = 0
-        while cs.reflected_light_intensity < 17:
-            drive.on_for_rotations(13, -13, 0.1)
-            counter2 = counter2 + 1
-
-        # reset
-        self.calibrate_data.append(counter2)
-        if len(self.calibrate_data) > 4:
-            average = sum(self.calibrate_data)/len(self.calibrate_data)
-            drive.on_for_rotations(13, -13, 0.1 * counter + 0.1*(math.log(average / counter)))
-        else:
-            drive.on_for_rotations(-13, 13, 0.1*counter2)
+            valuedesc = value / valuesum
+            drive.on_for_degrees(SpeedPercent(-20), SpeedPercent(20), 20)
 
     # Movement actions
     def light_transition_model(self, num_of_readings):
