@@ -58,7 +58,8 @@ def go(light1, flip1):
             ga.taya_correction(5)
             drive.on_for_rotations(-20, -20, 1.7)
         drive.off()
-        ga.correction_sam_main(count)
+        if not ga.vert:
+            ga.correction_sam_main(count)
         #ga.center_on_tile(count) put this back if it fucks up
         #ga.correction(120, count)
         # time.sleep(2)sssssssssssssss
