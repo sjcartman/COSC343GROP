@@ -147,7 +147,7 @@ class GoalAgent:
             # move left(because right wheel is turned on)s
             mRight.on(SpeedPercent(20))
             # if light reflected is not blacks
-            if cs.reflected_light_intensity > 30:
+            if cs.reflected_light_intensity > 20:
                 # record the time
                 end_time = time.time()
                 # save it into a value
@@ -162,25 +162,20 @@ class GoalAgent:
         start_time = time.time()
         while True:
             mLeft.on(SpeedPercent(20))
-            if cs.reflected_light_intensity > 30:
+            if cs.reflected_light_intensity > 20:
                 end_time = time.time()
                 value2 = end_time - start_time
                 drive.off()
                 break
         mLeft.on_for_seconds(SpeedPercent(-20), value2)
-        # round the values off to get an estimate(to 1 decimal place? not sure if it works)
-        if value > self.max1:
-            self.max1 = value
-        if value2 > self.max2:
-            self.max2 = value2
         value2 = float("{:.2f}".format(value2))
         value = float("{:.2f}".format(value))
         f = open("stuff.txt", "a")
         valuedif = float("{:.2f}".format(abs(value - value2)))#should i use margin of errorsss?
         """ this too """
-        if valuedif < 0.4:
+        if valuedif <= 0.1:
             return
-        if valuedif < 0.2 and not self.vert:
+        if valuedif <= 0.05 and not self.vert:
             return
         f.write("Count : "
                 + str(count)
@@ -192,9 +187,9 @@ class GoalAgent:
                 + str(value2)
                 + "\tSum Diff: "
                 + str(valuedif))
-        # use offset value to change rotations based on value?s
+        # use offset value to change rotations based on value?
         # value , value2 = offset, to be used on degrees turned?ss
-        const_below = 0.4  # if value is less than this, its too close to one side, so turn more
+        const_below = 0.5  # if value is less than this, its too close to one side, so turn more
         """ to fix the errors, change the values here """
         if self.vert:  #something to add here to fix the turn
             val = 5  # base value of degrees turned
@@ -204,32 +199,33 @@ class GoalAgent:
             val = 10
             if value2 <= const_below or value <= const_below:
                 val += 10  # turn more if too close to one sides
-        # margin of error allowed, smaller margin of error means turns less, bigger means turns moressssss
+        # margin of error allowed, smaller margin of error means turns less, bigger means turns mores
         if value2 > value:
-            #convert to log scales
-           #val = 10 * math.log10(val)ss
-            drive.on_for_degrees(SpeedPercent(20), SpeedPercent(-20), val * value2/self.max2)
-            f.write("\nValue2 is more than Value, turn right by " + str(val * value2/self.max2) + "\n")
+            #convert to log scaless
+            val = 10 * math.log10(abs(value - value2))
+            drive.on_for_degrees(SpeedPercent(20), SpeedPercent(-20), val)
+            f.write("\nValue2 is more than Value, turn right by " + str(val) + "\n")
         elif value == value2:
             return
         else:
-            drive.on_for_degrees(SpeedPercent(-20), SpeedPercent(20), val * value/self.max1)
-            f.write("\nValue1 is more than Value2, turn left by " + str(val * value/self.max1) + "\n")
+            drive.on_for_degrees(SpeedPercent(-20), SpeedPercent(20), val)
+            f.write("\nValue1 is more than Value2, turn left by " + str(val) + "\n")
         f.close()
 
     def taya_correction(self, c_value, direction=1):
         while cs.reflected_light_intensity < 15:
-            drive.on()
+            drive.on(20,20)
+        drive.on_for_seconds(20,20,0.3)
         drive.off()
         drive.on(20, 20)
         start_time = time.time()
         while True:
             test_time = time.time()
             test_total = test_time - start_time
-            if cs.reflected_light_intensity < 15 and test_total < 2.8:
-                drive.on_for_seconds(-20, -20, 1)
+            if cs.reflected_light_intensity < 15 and test_total < 3:
+                drive.on_for_seconds(-20, -20, 0.4)
                 break
-            elif test_total > 2.8:
+            elif test_total > 3:
                 drive.off()
                 # go back
                 drive.on_for_seconds(-20, -20, test_total)
@@ -238,7 +234,7 @@ class GoalAgent:
                     self.taya_correction(c_value + 5, direction=0)
                     break
                 else:
-                    drive.on_for_degrees(20, -20, c_value * 2)
+                    drive.on_for_degrees(-20, 20, c_value * 2)
                     self.taya_correction(c_value, direction=1)
                     break
 
